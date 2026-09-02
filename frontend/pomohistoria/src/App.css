@@ -1,0 +1,36 @@
+.container-login {
+  width: 30%;
+  padding: 50px;
+  text-align: center;
+}
+
+.container-login h1 {
+  font-size: 30px;
+  margin-bottom: 30px;
+}
+
+.container-login input {
+  width: 80%;
+  padding: 12px;
+  margin-bottom: 15px;
+  background-color: rgb(211, 211, 211);
+  border: 5%;
+  font-size: 16px;
+}
+
+.container-login a {
+  display: block;
+  margin-bottom: 40px;
+  font-size: 12px;
+  color: rgb(0, 102, 255);
+}
+
+.container-login button {
+  width: 80%;
+  padding: 12px;
+  background-color: orange;
+  color: white;
+  border: none;
+  font-size: 20px;
+  border-radius: 10px;
+}
