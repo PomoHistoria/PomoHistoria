@@ -1,24 +1,13 @@
 import './App.css'
+import Cadastro from './components/features/Auth/Cadastro'
+// import Login from './components/features/Auth/Login'
 
 function App() {
   return (
-  <div className="container-login">
-        <h1>LOGIN</h1>
-
-        <input
-          type="email"
-          placeholder="Email"
-        />
-
-        <input
-          type="password"
-          placeholder="Senha"
-        />
-      
-        <a>Esqueceu sua senha?</a>
-
-        <button>ENTRAR</button>
-    </div>
+    <>
+      <Cadastro />
+      {/* <Login /> */}
+    </>
   )
 }
 

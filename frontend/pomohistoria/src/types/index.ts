@@ -1,8 +1,3 @@
-/**
- * Tipos e interfaces compartilhadas para formulários
- * Reutilizáveis em toda a aplicação
- */
-
 /** Interface para usuário após cadastro */
 export interface User {
   id: string;
@@ -21,6 +16,20 @@ export interface RegisterRequest {
 
 /** Interface para resposta de cadastro */
 export interface RegisterResponse {
+  sucesso: boolean;
+  mensagem: string;
+  usuario?: User;
+  token?: string;
+}
+
+/** Interface para requisição de login */
+export interface LoginRequest {
+  email: string;
+  senha: string;
+}
+
+/** Interface para resposta de login */
+export interface LoginResponse {
   sucesso: boolean;
   mensagem: string;
   usuario?: User;

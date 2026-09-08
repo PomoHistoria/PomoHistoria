@@ -1,168 +1,91 @@
-﻿import { useState, type ChangeEvent } from 'react';
-import { type SyntheticEvent } from "react";
-import styles from './Cadastro.module.css';
+﻿import FundoForm from '../../../assets/FundoForm (1).png';
+import styles from '../../Modal/Form.module.css';
+import { useAuth } from '../../../hooks/useAuth';
+import {
+  getPasswordStrengthColor,
+  getPasswordStrengthMessage,
+  validateEmail,
+  validateName,
+  validatePassword,
+  validatePasswordStrength,
+} from '../../../utils/validation';
+import type { RegisterRequest } from '../../../types';
 
-interface FormData {
-  nome: string;
-  email: string;
-  senha: string;
+interface CadastroForm extends RegisterRequest {
   confirmaSenha: string;
 }
 
-interface FormErrors {
-  nome?: string;
-  email?: string;
-  senha?: string;
-  confirmaSenha?: string;
-  geral?: string;
-}
+const initialValues: CadastroForm = {
+  nome: '',
+  email: '',
+  senha: '',
+  confirmaSenha: '',
+};
 
 export default function Cadastro() {
-  const [formData, setFormData] = useState<FormData>({
-    nome: '',
-    email: '',
-    senha: '',
-    confirmaSenha: '',
-  });
+  const {
+    values,
+    errors,
+    isLoading,
+    successMessage,
+    handleChange,
+    handleSubmit,
+  } = useAuth<CadastroForm>({
+    initialValues,
+    validate: ({ nome, email, senha, confirmaSenha }) => {
+      const validationErrors: Partial<Record<keyof CadastroForm, string>> = {};
 
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [isLoading, setIsLoading] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+      if (!nome.trim()) validationErrors.nome = 'Nome é obrigatório';
+      else if (!validateName(nome)) validationErrors.nome = 'Nome deve ter no mínimo 3 caracteres';
 
-  const validateFormLocally = (): boolean => {
-    const newErrors: FormErrors = {};
+      if (!email.trim()) validationErrors.email = 'Email é obrigatório';
+      else if (!validateEmail(email.trim())) validationErrors.email = 'Email inválido';
 
-    // Validação do nome
-    if (!formData.nome.trim()) {
-      newErrors.nome = 'Nome é obrigatório';
-    } else if (formData.nome.trim().length < 3) {
-      newErrors.nome = 'Nome deve ter no mínimo 3 caracteres';
-    }
+      if (!senha) validationErrors.senha = 'Senha é obrigatória';
+      else if (!validatePassword(senha)) validationErrors.senha = 'Senha deve ter no mínimo 6 caracteres';
 
-    // Validação do email
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!formData.email.trim()) {
-      newErrors.email = 'Email é obrigatório';
-    } else if (!emailRegex.test(formData.email)) {
-      newErrors.email = 'Email inválido';
-    }
+      if (!confirmaSenha) validationErrors.confirmaSenha = 'Confirmação de senha é obrigatória';
+      else if (senha !== confirmaSenha) validationErrors.confirmaSenha = 'As senhas não coincidem';
 
-    // Validação da senha
-    if (!formData.senha) {
-      newErrors.senha = 'Senha é obrigatória';
-    } else if (formData.senha.length < 6) {
-      newErrors.senha = 'Senha deve ter no mínimo 6 caracteres';
-    }
-
-    // Validação da confirmação de senha
-    if (!formData.confirmaSenha) {
-      newErrors.confirmaSenha = 'Confirmação de senha é obrigatória';
-    } else if (formData.senha !== formData.confirmaSenha) {
-      newErrors.confirmaSenha = 'As senhas não coincidem';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-
-    // Limpar erro do campo quando o usuário começa a digitar
-    if (errors[name as keyof FormErrors]) {
-      setErrors((prevErrors) => ({
-        ...prevErrors,
-        [name]: undefined,
-      }));
-    }
-  };
-
-  const handleSubmit = async (e: SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    if (!validateFormLocally()) {
-      return;
-    }
-
-    setIsLoading(true);
-    setSuccessMessage('');
-
-    try { 
-      const response = await fetch(
-        "http://localhost:8080/api/auth/register", // URL do backend
-        {
+      return validationErrors;
+    },
+    onSubmit: async ({ nome, email, senha }) => {
+      const response = await fetch('http://localhost:8080/api/auth/register', {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            nome: formData.nome.trim(),
-            email: formData.email.trim().toLowerCase(),
-            senha: formData.senha,
+            nome: nome.trim(),
+            email: email.trim().toLowerCase(),
+            senha,
           }),
-        },
-      );
+        });
 
       if (!response.ok) {
-        const errorData = await response.json();
-
-        // Backend pode retornar múltiplos erros
-        if (errorData.errors) {
-          // Formato: { errors: { email: "Email já existe", nome: "..." } }
-          setErrors(errorData.errors);
-        } else if (errorData.message) {
-          // Formato: { message: "Erro ao registrar" }
-          setErrors({ geral: errorData.message });
-        } else {
-          setErrors({ geral: "Erro ao realizar cadastro" });
-        }
-        return;
+        const errorData = await response.json().catch(() => null) as { message?: string } | null;
+        throw new Error(errorData?.message ?? 'Erro ao realizar cadastro');
       }
 
-      const data = await response.json();
-      setSuccessMessage("✅ Cadastro realizado com sucesso!");
-
-      localStorage.setItem("token", data.token);
-
-      setFormData({
-        nome: '',
-        email: '',
-        senha: '',
-        confirmaSenha: '',
-      });
-
-      // Redirecionar para login após 2 segundos
-      setTimeout(() => {
+      const data = await response.json() as { token?: string };
+      if (data.token) localStorage.setItem('token', data.token);
+      window.setTimeout(() => {
         window.location.href = '/login';
       }, 2000);
-    } catch (error) {
-      console.error("Erro:", error);
-      setErrors({
-        geral:
-          error instanceof Error
-            ? error.message
-            : "Erro ao realizar o cadastro",
-      });
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    },
+  });
 
   return (
     <div className={styles.container}>
       {/* Seção de imagem/arte - visível apenas em desktop */}
       <div className={styles.imageSection}>
-        <div className={styles.imagePlaceholder}>
+        <figure className={styles.imageFigure}>
           <img
-            src="/public/fundo-art.png"
+            src={FundoForm}
             alt="PomoHistória"
             className={styles.backgroundImage}
           />
-        </div>
+        </figure>
       </div>
 
       {/* Seção do formulário */}
@@ -170,10 +93,9 @@ export default function Cadastro() {
         <div className={styles.formContainer}>
           <h1 className={styles.title}>CADASTRO</h1>
 
-          {/* Erro geral (vindo do backend) */}
           {errors.geral && (
             <div className={styles.errorMessage} role="alert">
-              ❌ {errors.geral}
+              {errors.geral}
             </div>
           )}
 
@@ -184,14 +106,13 @@ export default function Cadastro() {
           )}
 
           <form onSubmit={handleSubmit} className={styles.form} noValidate>
-            {/* Campo Nome */}
             <div className={styles.formGroup}>
               <input
                 type="text"
                 id="nome"
                 name="nome"
                 placeholder="Nome"
-                value={formData.nome}
+                value={values.nome}
                 onChange={handleChange}
                 disabled={isLoading}
                 className={`${styles.input} ${errors.nome ? styles.inputError : ""}`}
@@ -206,14 +127,13 @@ export default function Cadastro() {
               )}
             </div>
 
-            {/* Campo Email */}
             <div className={styles.formGroup}>
               <input
                 type="email"
                 id="email"
                 name="email"
                 placeholder="Email"
-                value={formData.email}
+                value={values.email}
                 onChange={handleChange}
                 disabled={isLoading}
                 className={`${styles.input} ${errors.email ? styles.inputError : ""}`}
@@ -228,14 +148,13 @@ export default function Cadastro() {
               )}
             </div>
 
-            {/* Campo Senha */}
             <div className={styles.formGroup}>
               <input
                 type="password"
                 id="senha"
                 name="senha"
                 placeholder="Senha"
-                value={formData.senha}
+                value={values.senha}
                 onChange={handleChange}
                 disabled={isLoading}
                 className={`${styles.input} ${errors.senha ? styles.inputError : ""}`}
@@ -248,16 +167,23 @@ export default function Cadastro() {
                   {errors.senha}
                 </span>
               )}
+              {values.senha && !errors.senha && (
+                <span
+                  className={styles.passwordStrength}
+                  style={{ color: getPasswordStrengthColor(validatePasswordStrength(values.senha)) }}
+                >
+                  {getPasswordStrengthMessage(validatePasswordStrength(values.senha))}
+                </span>
+              )}
             </div>
 
-            {/* Campo Confirmar Senha */}
             <div className={styles.formGroup}>
               <input
                 type="password"
                 id="confirmaSenha"
                 name="confirmaSenha"
                 placeholder="Confirme sua senha"
-                value={formData.confirmaSenha}
+                value={values.confirmaSenha}
                 onChange={handleChange}
                 disabled={isLoading}
                 className={`${styles.input} ${errors.confirmaSenha ? styles.inputError : ""}`}
@@ -274,7 +200,6 @@ export default function Cadastro() {
               )}
             </div>
 
-            {/* Botão Criar */}
             <button
               type="submit"
               disabled={isLoading}
@@ -285,9 +210,8 @@ export default function Cadastro() {
             </button>
           </form>
 
-          {/* Link para login */}
           <p className={styles.loginLink}>
-            Já tem conta? <a href="/login">Faça login aqui</a>
+            Já tem conta? <a href="/Login">Faça login aqui</a>
           </p>
         </div>
       </div>

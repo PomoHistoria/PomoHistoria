@@ -1,33 +1,32 @@
-import { useState, useCallback, ChangeEvent, FormEvent } from 'react';
+import { useState, useCallback, type ChangeEvent, type SubmitEvent } from 'react';
 
-interface UseFormOptions<T> {
-  initialValues: T;
-  onSubmit: (values: T) => Promise<void> | void;
-  validate?: (values: T) => Record<keyof T, string>;
+interface UseAuthOptions<FormValuesOptions> {
+  initialValues: FormValuesOptions;
+  onSubmit: (values: FormValuesOptions) => Promise<void> | void;
+  validate?: (values: FormValuesOptions) => Partial<Record<keyof FormValuesOptions, string>>;
 }
 
-interface UseFormReturn<T> {
-  values: T;
-  errors: Record<keyof T, string>;
+type FormErrors<FormValues> = Partial<Record<keyof FormValues, string>> & {
+  geral?: string;
+};
+
+interface UseAuthReturn<FormValues> {
+  values: FormValues;
+  errors: FormErrors<FormValues>;
   isLoading: boolean;
   successMessage: string;
   handleChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => void;
-  handleSubmit: (e: FormEvent<HTMLFormElement>) => Promise<void>;
+  handleSubmit: (e: SubmitEvent<HTMLFormElement>) => Promise<void>;
   resetForm: () => void;
-  setFieldValue: (field: keyof T, value: any) => void;
-  setErrors: (errors: Record<keyof T, string>) => void;
+  setFieldValue: (field: keyof FormValues, value: FormValues[keyof FormValues]) => void;
+  setErrors: (errors: FormErrors<FormValues>) => void;
 }
-
-/**
- * Hook customizado para gerenciar estado de formulários
- * Fornece validação, loading state e gerenciamento de erros
- */
-export function useForm<T extends Record<string, any>>(
-  options: UseFormOptions<T>
-): UseFormReturn<T> {
+export function useAuth<FormValues extends Record<string, any>>(
+  options: UseAuthOptions<FormValues>
+): UseAuthReturn<FormValues> {
   const { initialValues, onSubmit, validate } = options;
-  const [values, setValues] = useState<T>(initialValues);
-  const [errors, setErrors] = useState<Record<keyof T, string>>({} as Record<keyof T, string>);
+  const [values, setValues] = useState<FormValues>(initialValues);
+  const [errors, setErrors] = useState<FormErrors<FormValues>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
@@ -43,16 +42,17 @@ export function useForm<T extends Record<string, any>>(
     }));
 
     // Limpar erro ao digitar
-    if (errors[name as keyof T]) {
+    if (errors[name as keyof FormValues] || errors.geral) {
       setErrors((prevErrors) => ({
         ...prevErrors,
         [name]: '',
+        geral: '',
       }));
     }
   }, [errors]);
 
   const handleSubmit = useCallback(
-    async (e: FormEvent<HTMLFormElement>) => {
+    async (e: SubmitEvent<HTMLFormElement>) => {
       e.preventDefault();
 
       if (validate) {
@@ -73,8 +73,8 @@ export function useForm<T extends Record<string, any>>(
       } catch (error) {
         setErrors({
           ...errors,
-          [Object.keys(initialValues)[0]]: error instanceof Error ? error.message : 'Erro ao processar formulário',
-        } as Record<keyof T, string>);
+          geral: error instanceof Error ? error.message : 'Erro ao processar formulário',
+        });
       } finally {
         setIsLoading(false);
       }
@@ -84,11 +84,11 @@ export function useForm<T extends Record<string, any>>(
 
   const resetForm = useCallback(() => {
     setValues(initialValues);
-    setErrors({} as Record<keyof T, string>);
+    setErrors({});
     setSuccessMessage('');
   }, [initialValues]);
 
-  const setFieldValue = useCallback((field: keyof T, value: any) => {
+  const setFieldValue = useCallback((field: keyof FormValues, value: FormValues[keyof FormValues]) => {
     setValues((prevState) => ({
       ...prevState,
       [field]: value,
