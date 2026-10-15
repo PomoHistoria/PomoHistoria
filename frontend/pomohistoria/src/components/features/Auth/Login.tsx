@@ -1,5 +1,6 @@
 import FundoForm from '../../../assets/FundoForm (1).png';
-import styles from './Form.module.css';
+import styles from '../../Modal/Form.module.css';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { validateEmail, validatePassword } from '../../../utils/validation';
 import type { LoginRequest, LoginResponse } from '../../../types';
@@ -10,6 +11,7 @@ const initialValues: LoginRequest = {
 };
 
 export default function Login() {
+  const navigate = useNavigate();
   const {
     values,
     errors,
@@ -56,7 +58,7 @@ export default function Login() {
 
       const data = await response.json() as LoginResponse;
       if (data.token) localStorage.setItem('token', data.token);
-      window.location.href = '/';
+      navigate('/');
     },
   });
 
@@ -144,7 +146,7 @@ export default function Login() {
           </form>
 
           <p className={styles.loginLink}>
-            Ainda não tem conta? <a href="/Cadastro">Cadastre-se aqui</a>
+            Ainda não tem conta? <Link to="/cadastro">Cadastre-se aqui</Link>
           </p>
         </div>
       </div>

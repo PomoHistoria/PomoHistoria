@@ -1,5 +1,6 @@
 ﻿import FundoForm from '../../../assets/FundoForm (1).png';
 import styles from '../../Modal/Form.module.css';
+import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import {
   getPasswordStrengthColor,
@@ -23,6 +24,7 @@ const initialValues: CadastroForm = {
 };
 
 export default function Cadastro() {
+  const navigate = useNavigate();
   const {
     values,
     errors,
@@ -70,7 +72,7 @@ export default function Cadastro() {
       const data = await response.json() as { token?: string };
       if (data.token) localStorage.setItem('token', data.token);
       window.setTimeout(() => {
-        window.location.href = '/login';
+        navigate('/login');
       }, 2000);
     },
   });
@@ -211,7 +213,7 @@ export default function Cadastro() {
           </form>
 
           <p className={styles.loginLink}>
-            Já tem conta? <a href="/Login">Faça login aqui</a>
+            Já tem conta? <Link to="/login">Faça login aqui</Link>
           </p>
         </div>
       </div>

@@ -1,13 +1,12 @@
 import './App.css'
-import Cadastro from './components/features/Auth/Cadastro'
-// import Login from './components/features/Auth/Login'
+import Routes from './routes/Routes';
+import { PomodoroTimersProvider } from './hooks/PomodoroTimersProvider'
 
 function App() {
   return (
-    <>
-      <Cadastro />
-      {/* <Login /> */}
-    </>
+    <PomodoroTimersProvider>
+      <Routes />
+    </PomodoroTimersProvider>
   )
 }
 
