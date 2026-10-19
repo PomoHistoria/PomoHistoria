@@ -2,6 +2,7 @@
 import styles from '../../Modal/Form.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
+import { authApi } from '../../../services/authApi';
 import {
   getPasswordStrengthColor,
   getPasswordStrengthMessage,
@@ -52,25 +53,11 @@ export default function Cadastro() {
       return validationErrors;
     },
     onSubmit: async ({ nome, email, senha }) => {
-      const response = await fetch('http://localhost:8080/api/auth/register', {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            nome: nome.trim(),
-            email: email.trim().toLowerCase(),
-            senha,
-          }),
-        });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null) as { message?: string } | null;
-        throw new Error(errorData?.message ?? 'Erro ao realizar cadastro');
-      }
-
-      const data = await response.json() as { token?: string };
-      if (data.token) localStorage.setItem('token', data.token);
+      await authApi.registrar({
+        nome: nome.trim(),
+        email: email.trim().toLowerCase(),
+        senha,
+      });
       window.setTimeout(() => {
         navigate('/login');
       }, 2000);

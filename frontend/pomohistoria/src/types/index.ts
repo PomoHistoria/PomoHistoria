@@ -3,7 +3,7 @@ export interface User {
   id: string;
   nome: string;
   email: string;
-  dataCriacao: Date;
+  dataCriacao: string;
   ativo: boolean;
 }
 
@@ -18,8 +18,7 @@ export interface RegisterRequest {
 export interface RegisterResponse {
   sucesso: boolean;
   mensagem: string;
-  usuario?: User;
-  token?: string;
+  usuario: User;
 }
 
 /** Interface para requisição de login */
@@ -32,8 +31,7 @@ export interface LoginRequest {
 export interface LoginResponse {
   sucesso: boolean;
   mensagem: string;
-  usuario?: User;
-  token?: string;
+  usuario: User;
 }
 
 /** Interface para erros de formulário */

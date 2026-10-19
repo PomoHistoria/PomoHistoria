@@ -2,6 +2,19 @@
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
 
+## API do backend
+
+O frontend envia os dados de cadastro e login para o backend Spring Boot pelos endpoints
+`POST /api/auth/register` e `POST /api/auth/login`. A integração fica centralizada em
+`src/services/authApi.ts`.
+
+Por padrão, as requisições usam `http://localhost:8080`. Para apontar para outro backend,
+defina `VITE_API_BASE_URL` no ambiente do Vite, por exemplo:
+
+```env
+VITE_API_BASE_URL=http://localhost:8080
+```
+
 Currently, two official plugins are available:
 
 - [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)

@@ -2,8 +2,9 @@ import FundoForm from '../../../assets/FundoForm (1).png';
 import styles from '../../Modal/Form.module.css';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
+import { authApi } from '../../../services/authApi';
 import { validateEmail, validatePassword } from '../../../utils/validation';
-import type { LoginRequest, LoginResponse } from '../../../types';
+import type { LoginRequest } from '../../../types';
 
 const initialValues: LoginRequest = {
   email: '',
@@ -35,29 +36,10 @@ export default function Login() {
       return validationErrors;
     },
     onSubmit: async ({ email, senha }) => {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: email.trim().toLowerCase(),
-          senha,
-        } satisfies LoginRequest),
+      await authApi.entrar({
+        email: email.trim().toLowerCase(),
+        senha,
       });
-
-      if (!response.ok) {
-        const errorData = await response.json().catch(() => null) as {
-          message?: string;
-          mensagem?: string;
-        } | null;
-        throw new Error(
-          errorData?.message ?? errorData?.mensagem ?? 'Erro ao realizar login'
-        );
-      }
-
-      const data = await response.json() as LoginResponse;
-      if (data.token) localStorage.setItem('token', data.token);
       navigate('/');
     },
   });
