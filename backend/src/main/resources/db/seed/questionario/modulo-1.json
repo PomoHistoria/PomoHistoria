@@ -1,0 +1,85 @@
+{
+  "modulo": 1,
+  "partes": [
+    {
+      "parte": 1,
+      "questoes": [
+        {
+          "ordem": 1,
+          "enunciado": "Exemplo de pergunta do módulo 1, parte 1.",
+          "alternativas": {
+            "A": "Alternativa A",
+            "B": "Alternativa B",
+            "C": "Alternativa C",
+            "D": "Alternativa D"
+          },
+          "respostaCorreta": "A"
+        },
+        {
+          "ordem": 2,
+          "enunciado": "Exemplo de pergunta do módulo 1, parte 1.",
+          "alternativas": {
+            "A": "Alternativa A",
+            "B": "Alternativa B",
+            "C": "Alternativa C",
+            "D": "Alternativa D"
+          },
+          "respostaCorreta": "B"
+        },
+        {
+          "ordem": 3,
+          "enunciado": "Exemplo de pergunta do módulo 1, parte 1.",
+          "alternativas": {
+            "A": "Alternativa A",
+            "B": "Alternativa B",
+            "C": "Alternativa C",
+            "D": "Alternativa D"
+          },
+          "respostaCorreta": "C"
+        },
+        {
+          "ordem": 4,
+          "enunciado": "Exemplo de pergunta do módulo 1, parte 1.",
+          "alternativas": {
+            "A": "Alternativa A",
+            "B": "Alternativa B",
+            "C": "Alternativa C",
+            "D": "Alternativa D"
+          },
+          "respostaCorreta": "D"
+        },
+        {
+          "ordem": 5,
+          "enunciado": "Exemplo de pergunta do módulo 1, parte 1.",
+          "alternativas": {
+            "A": "Alternativa A",
+            "B": "Alternativa B",
+            "C": "Alternativa C",
+            "D": "Alternativa D"
+          },
+          "respostaCorreta": "A"
+        }
+      ]
+    },
+    {
+      "parte": 2,
+      "questoes": [
+        { "ordem": 1, "enunciado": "Exemplo de pergunta do módulo 1, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "B" },
+        { "ordem": 2, "enunciado": "Exemplo de pergunta do módulo 1, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "C" },
+        { "ordem": 3, "enunciado": "Exemplo de pergunta do módulo 1, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "D" },
+        { "ordem": 4, "enunciado": "Exemplo de pergunta do módulo 1, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "A" },
+        { "ordem": 5, "enunciado": "Exemplo de pergunta do módulo 1, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "B" }
+      ]
+    },
+    {
+      "parte": 3,
+      "questoes": [
+        { "ordem": 1, "enunciado": "Exemplo de pergunta do módulo 1, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "C" },
+        { "ordem": 2, "enunciado": "Exemplo de pergunta do módulo 1, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "D" },
+        { "ordem": 3, "enunciado": "Exemplo de pergunta do módulo 1, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "A" },
+        { "ordem": 4, "enunciado": "Exemplo de pergunta do módulo 1, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "B" },
+        { "ordem": 5, "enunciado": "Exemplo de pergunta do módulo 1, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "C" }
+      ]
+    }
+  ]
+}
