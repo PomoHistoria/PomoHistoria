@@ -1,7 +1,10 @@
 package com.project.PomoHistoria.security;
 
 import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.options;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -11,6 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.jayway.jsonpath.JsonPath;
+import com.project.PomoHistoria.questionario.ModuloIniciadoRepository;
 import com.project.PomoHistoria.support.PostgresEmbutido;
 import com.project.PomoHistoria.usuario.Usuario;
 import com.project.PomoHistoria.usuario.UsuarioRepository;
@@ -44,6 +48,58 @@ class SegurancaIntegrationTest extends PostgresEmbutido {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private ModuloIniciadoRepository moduloIniciadoRepository;
+
+    @Test
+    void usuarioComumExcluiAPropriaContaComSenha() throws Exception {
+        MockHttpSession sessao = usuarioLogado(Usuario.Papel.USER);
+        String email = (String) sessao.getAttribute("email-teste");
+        UUID id = usuarioRepository.findByEmail(email).orElseThrow().getId();
+        comCsrf(sessao, post("/api/questionario/modulos/1/iniciar"), null).andExpect(status().isNoContent());
+        assertTrue(moduloIniciadoRepository.existsByUsuarioIdAndModulo(id, 1));
+
+        comCsrf(sessao, delete("/api/usuarios/me"), "{\"senhaAtual\":\"senha-errada\"}")
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Senha atual incorreta."));
+        comCsrf(sessao, delete("/api/usuarios/me"), "{}")
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.message").value("Informe sua senha para excluir a conta."));
+        assertTrue(usuarioRepository.findByEmail(email).isPresent(), "Senha errada não pode excluir");
+
+        comCsrf(sessao, delete("/api/usuarios/me"), "{\"senhaAtual\":\"" + SENHA + "\"}")
+                .andExpect(status().isNoContent());
+
+        assertTrue(usuarioRepository.findByEmail(email).isEmpty(), "A conta deve ser apagada");
+        assertFalse(moduloIniciadoRepository.existsByUsuarioIdAndModulo(id, 1), "O progresso deve ir junto");
+        mvc.perform(get("/api/auth/me").session(sessao)).andExpect(status().isUnauthorized());
+        entrar(new MockHttpSession(), email, SENHA).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void adminNaoExcluiAPropriaConta() throws Exception {
+        MockHttpSession sessao = usuarioLogado(Usuario.Papel.ADMIN);
+        String email = (String) sessao.getAttribute("email-teste");
+
+        comCsrf(sessao, delete("/api/usuarios/me"), "{\"senhaAtual\":\"" + SENHA + "\"}")
+                .andExpect(status().isForbidden())
+                .andExpect(jsonPath("$.message").value("Contas de administrador não podem ser excluídas pelo perfil."));
+
+        assertTrue(usuarioRepository.findByEmail(email).isPresent());
+        mvc.perform(get("/api/auth/me").session(sessao)).andExpect(status().isOk());
+    }
+
+    @Test
+    void exclusaoDeContaExigeTokenCsrf() throws Exception {
+        MockHttpSession sessao = usuarioLogado(Usuario.Papel.USER);
+        mvc.perform(delete("/api/usuarios/me")
+                        .session(sessao)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\"senhaAtual\":\"" + SENHA + "\"}"))
+                .andExpect(status().isForbidden());
+        assertTrue(usuarioRepository.findByEmail((String) sessao.getAttribute("email-teste")).isPresent());
+    }
 
     @Test
     void healthCheckEPublico() throws Exception {

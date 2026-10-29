@@ -17,11 +17,24 @@ export type PomodoroTimersContextValue = {
 
 export const PomodoroTimersContext = createContext<PomodoroTimersContextValue | null>(null)
 
+/** Chave onde os cronômetros de cada usuário ficam salvos no navegador. */
+export function chaveDosCronometros(usuarioId: string) {
+  return `pomohistoria:cronometros:${usuarioId}`
+}
+
+/** Apaga os cronômetros salvos do usuário (ex.: quando a conta é excluída). */
+export function apagarCronometrosSalvos(usuarioId: string) {
+  try {
+    localStorage.removeItem(chaveDosCronometros(usuarioId))
+  } catch {
+    // Armazenamento indisponível: não há nada salvo para apagar.
+  }
+}
+
 /**
- * Cronômetro "ativo": rodando, ou pausado no meio da sessão (para poder ser retomado).
- * Parado no tempo cheio ou já terminado (00:00) não conta.
+ * Cronômetro "ativo" = contando agora. É o único que aparece no início;
+ * pausado, parado ou terminado ele só aparece na página Pomodoro.
  */
 export function timerAtivo(timer: PomodoroTimerState): boolean {
-  if (timer.isRunning) return true
-  return timer.remainingSeconds > 0 && timer.remainingSeconds < timer.durationMinutes * 60
+  return timer.isRunning
 }

@@ -8,6 +8,7 @@ import { SessaoContext } from './SessaoContext';
 export function SessaoProvider({ children }: { children: ReactNode }) {
   const [usuario, setUsuario] = useState<User | null>(null);
   const [carregando, setCarregando] = useState(true);
+  const [aviso, setAviso] = useState<string | null>(null);
 
   useEffect(() => {
     let ativo = true;
@@ -33,6 +34,7 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
 
   const entrar = useCallback(async (email: string, senha: string) => {
     const resposta = await authApi.entrar({ email, senha });
+    setAviso(null);
     setUsuario(resposta.usuario);
     return resposta.usuario;
   }, []);
@@ -47,10 +49,14 @@ export function SessaoProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const atualizarUsuario = useCallback((atualizado: User) => setUsuario(atualizado), []);
+  const limparSessao = useCallback((novoAviso?: string) => {
+    setAviso(novoAviso ?? null);
+    setUsuario(null);
+  }, []);
 
   const value = useMemo(
-    () => ({ usuario, carregando, entrar, sair, atualizarUsuario }),
-    [usuario, carregando, entrar, sair, atualizarUsuario]
+    () => ({ usuario, carregando, entrar, sair, atualizarUsuario, limparSessao, aviso }),
+    [usuario, carregando, entrar, sair, atualizarUsuario, limparSessao, aviso]
   );
 
   return <SessaoContext.Provider value={value}>{children}</SessaoContext.Provider>;

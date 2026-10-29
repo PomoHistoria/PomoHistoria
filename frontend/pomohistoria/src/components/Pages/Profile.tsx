@@ -2,6 +2,7 @@ import { useState } from 'react'
 import type { ChangeEvent, SubmitEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSessao } from '../../hooks/useSessao'
+import { apagarCronometrosSalvos } from '../../hooks/PomodoroTimersContext'
 import { reduzirImagem, usuarioApi } from '../../services/usuarioApi'
 import { validateEmail, validateName, validatePassword } from '../../utils/validation'
 import logo from '../../assets/POMOHISTÓRIA.webp'
@@ -12,7 +13,7 @@ const TELEFONE_VALIDO = /^[0-9()+\-\s]{8,20}$/
 type Feedback = { tipo: 'sucesso' | 'erro'; texto: string } | null
 
 export default function Profile() {
-  const { usuario, sair, atualizarUsuario } = useSessao()
+  const { usuario, sair, atualizarUsuario, limparSessao } = useSessao()
   const navigate = useNavigate()
 
   // A rota é protegida por RequireAuth, então o usuário já está carregado aqui.
@@ -27,6 +28,39 @@ export default function Profile() {
   const [fotoAlterada, setFotoAlterada] = useState(false)
   const [salvando, setSalvando] = useState(false)
   const [feedback, setFeedback] = useState<Feedback>(null)
+  const [confirmandoExclusao, setConfirmandoExclusao] = useState(false)
+  const [senhaExclusao, setSenhaExclusao] = useState('')
+  const [excluindo, setExcluindo] = useState(false)
+  const [erroExclusao, setErroExclusao] = useState('')
+  const podeExcluirConta = usuario?.papel !== 'ADMIN'
+
+  function cancelarExclusao() {
+    setConfirmandoExclusao(false)
+    setSenhaExclusao('')
+    setErroExclusao('')
+  }
+
+  async function handleExcluirConta() {
+    if (!senhaExclusao) {
+      setErroExclusao('Informe sua senha para excluir a conta.')
+      return
+    }
+    if (!window.confirm('Sua conta, seu progresso e sua foto serão apagados para sempre. Deseja continuar?')) {
+      return
+    }
+
+    setExcluindo(true)
+    setErroExclusao('')
+    try {
+      await usuarioApi.excluirConta(senhaExclusao)
+      if (usuario) apagarCronometrosSalvos(usuario.id)
+      // Sem usuário, a proteção da rota leva ao login, que mostra o aviso.
+      limparSessao('Sua conta foi excluída.')
+    } catch (error) {
+      setErroExclusao(error instanceof Error ? error.message : 'Não foi possível excluir a conta.')
+      setExcluindo(false)
+    }
+  }
 
   async function handleSair() {
     await sair().catch(() => undefined)
@@ -244,6 +278,56 @@ export default function Profile() {
             </p>
           )}
         </form>
+
+        {podeExcluirConta && (
+          <section className={styles.dangerZone} aria-labelledby="excluir-conta-titulo">
+            <h2 id="excluir-conta-titulo">EXCLUIR CONTA</h2>
+            <p className={styles.hint}>
+              Apaga sua conta, seu progresso no questionário e sua foto. Esta ação não pode ser desfeita.
+            </p>
+
+            {!confirmandoExclusao ? (
+              <button type="button" className={styles.dangerButton} onClick={() => setConfirmandoExclusao(true)}>
+                EXCLUIR MINHA CONTA
+              </button>
+            ) : (
+              <div className={styles.dangerConfirm}>
+                <input
+                  aria-label="Senha para excluir a conta"
+                  type="password"
+                  placeholder="Digite sua senha para confirmar"
+                  value={senhaExclusao}
+                  onChange={(event) => setSenhaExclusao(event.target.value)}
+                  onKeyDown={(event) => {
+                    if (event.key === 'Enter') {
+                      event.preventDefault()
+                      void handleExcluirConta()
+                    }
+                  }}
+                  maxLength={255}
+                  autoComplete="current-password"
+                  disabled={excluindo}
+                  autoFocus
+                />
+                {erroExclusao && <p className={styles.dangerErro} role="alert">{erroExclusao}</p>}
+                <div className={styles.dangerActions}>
+                  <button type="button" className={styles.cancelButton} onClick={cancelarExclusao} disabled={excluindo}>
+                    CANCELAR
+                  </button>
+                  <button
+                    type="button"
+                    className={styles.dangerButton}
+                    onClick={() => void handleExcluirConta()}
+                    disabled={excluindo}
+                    aria-busy={excluindo}
+                  >
+                    {excluindo ? 'EXCLUINDO...' : 'EXCLUIR DEFINITIVAMENTE'}
+                  </button>
+                </div>
+              </div>
+            )}
+          </section>
+        )}
       </section>
     </main>
   )

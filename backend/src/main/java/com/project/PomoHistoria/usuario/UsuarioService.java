@@ -3,6 +3,7 @@ package com.project.PomoHistoria.usuario;
 import com.project.PomoHistoria.common.exception.ConflitoException;
 import com.project.PomoHistoria.common.exception.CredenciaisInvalidasException;
 import com.project.PomoHistoria.common.exception.DadosInvalidosException;
+import com.project.PomoHistoria.common.exception.OperacaoNaoPermitidaException;
 import java.util.Base64;
 import java.util.UUID;
 import java.util.regex.Matcher;
@@ -68,15 +69,9 @@ public class UsuarioService {
         boolean trocaEmail = !emailNovo.equals(usuario.getEmail());
         boolean trocaSenha = novaSenha != null && !novaSenha.isEmpty();
 
-        if (trocaEmail || trocaSenha) {
-            boolean senhaAtualCorreta = senhaAtual != null
-                    && !senhaAtual.isEmpty()
-                    && !SenhaPolicy.excedeLimiteDeBytes(senhaAtual)
-                    && passwordEncoder.matches(senhaAtual, usuario.getSenha());
-            if (!senhaAtualCorreta) {
-                // 400, não 401: o front trata 401 como "sessão expirada".
-                throw new DadosInvalidosException("Senha atual incorreta. Ela é necessária para trocar email ou senha.");
-            }
+        if ((trocaEmail || trocaSenha) && !senhaAtualConfere(usuario, senhaAtual)) {
+            // 400, não 401: o front trata 401 como "sessão expirada".
+            throw new DadosInvalidosException("Senha atual incorreta. Ela é necessária para trocar email ou senha.");
         }
         if (trocaEmail && usuarioRepository.existsByEmail(emailNovo)) {
             throw new ConflitoException("Email já cadastrado.");
@@ -94,6 +89,30 @@ public class UsuarioService {
         } catch (DataIntegrityViolationException exception) {
             throw new ConflitoException("Email já cadastrado.");
         }
+    }
+
+    /**
+     * Exclui a própria conta, depois de conferir a senha atual. O progresso e os módulos iniciados
+     * são apagados junto pelo banco (ON DELETE CASCADE).
+     * Contas ADMIN não podem ser excluídas por aqui, para o sistema não ficar sem quem edite as questões.
+     */
+    public void excluirConta(UUID id, String senhaAtual) {
+        Usuario usuario = buscarAtivo(id);
+        if (usuario.getPapel() == Usuario.Papel.ADMIN) {
+            throw new OperacaoNaoPermitidaException("Contas de administrador não podem ser excluídas pelo perfil.");
+        }
+        if (!senhaAtualConfere(usuario, senhaAtual)) {
+            throw new DadosInvalidosException("Senha atual incorreta.");
+        }
+        usuarioRepository.delete(usuario);
+        usuarioRepository.flush();
+    }
+
+    private boolean senhaAtualConfere(Usuario usuario, String senhaAtual) {
+        return senhaAtual != null
+                && !senhaAtual.isEmpty()
+                && !SenhaPolicy.excedeLimiteDeBytes(senhaAtual)
+                && passwordEncoder.matches(senhaAtual, usuario.getSenha());
     }
 
     /** {@code foto} nula remove a foto. Aceita só data URL de imagem JPEG, PNG ou WebP. */

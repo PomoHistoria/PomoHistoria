@@ -16,6 +16,11 @@ export const usuarioApi = {
   async atualizarFoto(foto: string | null): Promise<User> {
     return exigirUsuario(await apiRequest('/api/usuarios/me/foto', { method: 'PUT', body: { foto } }));
   },
+
+  /** Exclui a própria conta (só usuários comuns). O servidor encerra a sessão. */
+  async excluirConta(senhaAtual: string): Promise<void> {
+    await apiRequest('/api/usuarios/me', { method: 'DELETE', body: { senhaAtual } });
+  },
 };
 
 /** Reduz a imagem para no máximo 256x256 (JPEG), para a foto ficar leve (~30 KB). */
