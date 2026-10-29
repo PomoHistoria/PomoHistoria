@@ -161,13 +161,23 @@
   gap: 0.55rem;
 }
 
+/* Área de toque de pelo menos 44px (o "−" e o "+" sozinhos são estreitos demais para o dedo). */
 .adjustButton {
+  display: grid;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  place-items: center;
   border: 0;
-  padding: 0 0.1rem;
+  border-radius: 0.6rem;
+  padding: 0;
   background: transparent;
   color: #fff;
   cursor: pointer;
   font: 700 2rem/1 Arial, Helvetica, sans-serif;
+}
+
+.adjustButton:hover:not(:disabled) {
+  background: rgb(255 255 255 / 10%);
 }
 
 .adjustButton:disabled {
@@ -190,15 +200,17 @@
 }
 
 .startButton {
-  min-width: 3.8rem;
-  margin-top: 0.45rem;
+  min-width: 7rem;
+  min-height: 2.75rem;
+  margin-top: 0.5rem;
   border: 0;
-  border-radius: 0.55rem;
-  padding: 0.35rem 0.75rem;
+  border-radius: 0.65rem;
+  padding: 0.6rem 1.2rem;
   background: #00e83b;
   color: #fff;
   cursor: pointer;
-  font: 700 0.62rem/1 Arial, Helvetica, sans-serif;
+  font: 700 0.9rem/1 Arial, Helvetica, sans-serif;
+  letter-spacing: 0.04em;
 }
 
 .startButton:hover {
