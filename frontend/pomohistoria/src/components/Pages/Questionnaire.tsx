@@ -156,7 +156,7 @@ export default function Questionnaire() {
   return (
     <main className={styles.page}>
       <header className={styles.header}>
-        <Link to="/" aria-label="Voltar ao início">
+        <Link className={styles.logoLink} to="/" aria-label="Voltar ao início">
           <img className={styles.logo} src={logo} alt="PomoHistória" />
         </Link>
         <Link className={styles.backLink} to="/">Voltar ao início</Link>

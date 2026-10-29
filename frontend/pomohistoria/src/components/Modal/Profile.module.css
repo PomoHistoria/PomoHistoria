@@ -284,6 +284,7 @@
 
 .dangerButton,
 .cancelButton {
+  min-height: 2.5rem;
   border: 0;
   border-radius: 0.45rem;
   padding: 0.45rem 1rem;
@@ -359,7 +360,7 @@
   }
 
   .userSummary strong {
-    font-size: 0.55rem;
+    font-size: 0.7rem;
     text-align: center;
   }
 
@@ -397,5 +398,36 @@
 
   .feedback {
     right: 1rem;
+  }
+}
+/*
+ * Celular (em pé ou deitado): o SALVAR fixo no canto cobria campos e a caixa de exclusão.
+ * Aqui ele e a mensagem de retorno vão para o fim do formulário, alinhados à direita.
+ */
+@media (max-width: 700px), (max-height: 500px) {
+  .save,
+  .feedback {
+    position: static;
+    grid-column: 1 / -1;
+  }
+
+  .feedback {
+    order: 1;
+    max-width: none;
+  }
+
+  .save {
+    order: 2;
+    justify-self: end;
+    min-height: 2.75rem;
+  }
+
+  .dangerButton,
+  .cancelButton {
+    min-height: 2.75rem;
+  }
+
+  .dangerZone {
+    transform: none;
   }
 }

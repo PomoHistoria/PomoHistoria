@@ -22,7 +22,18 @@
   height: auto;
 }
 
+/* O logo também é link para o início: área de toque com pelo menos 44px de altura. */
+.logoLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+}
+
 .backLink {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  box-sizing: border-box;
   border: 1px solid rgb(255 255 255 / 55%);
   border-radius: 0.5rem;
   padding: 0.55rem 0.8rem;
@@ -434,6 +445,16 @@
 
   .answers {
     grid-template-columns: 1fr;
+  }
+
+  /* Número em cima e "Parte N" / "Concluída" embaixo, sem quebrar no meio do texto. */
+  .part {
+    flex-direction: column;
+    gap: 0.25rem;
+    padding: 0.55rem 0.15rem;
+    font-size: 0.75rem;
+    text-align: center;
+    white-space: nowrap;
   }
 
   .quizFooter {

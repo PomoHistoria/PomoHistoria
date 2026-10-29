@@ -128,7 +128,7 @@ export default function Admin() {
   return (
     <main className={pageStyles.page}>
       <header className={pageStyles.header}>
-        <Link to="/" aria-label="Voltar ao início">
+        <Link className={pageStyles.logoLink} to="/" aria-label="Voltar ao início">
           <img className={pageStyles.logo} src={logo} alt="PomoHistória" />
         </Link>
         <Link className={pageStyles.backLink} to="/">Voltar ao início</Link>
