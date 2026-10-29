@@ -1,5 +1,6 @@
-﻿import FundoForm from '../../../assets/FundoForm (1).png';
+import FundoForm from '../../../assets/FundoForm-_1_.webp';
 import styles from '../../Modal/Form.module.css';
+import { useEffect, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
 import { authApi } from '../../../services/authApi';
@@ -26,6 +27,7 @@ const initialValues: CadastroForm = {
 
 export default function Cadastro() {
   const navigate = useNavigate();
+  const redirecionamento = useRef<number | undefined>(undefined);
   const {
     values,
     errors,
@@ -45,7 +47,7 @@ export default function Cadastro() {
       else if (!validateEmail(email.trim())) validationErrors.email = 'Email inválido';
 
       if (!senha) validationErrors.senha = 'Senha é obrigatória';
-      else if (!validatePassword(senha)) validationErrors.senha = 'Senha deve ter no mínimo 6 caracteres';
+      else if (!validatePassword(senha, 8)) validationErrors.senha = 'Senha deve ter no mínimo 8 caracteres';
 
       if (!confirmaSenha) validationErrors.confirmaSenha = 'Confirmação de senha é obrigatória';
       else if (senha !== confirmaSenha) validationErrors.confirmaSenha = 'As senhas não coincidem';
@@ -58,11 +60,14 @@ export default function Cadastro() {
         email: email.trim().toLowerCase(),
         senha,
       });
-      window.setTimeout(() => {
+      redirecionamento.current = window.setTimeout(() => {
         navigate('/login');
       }, 2000);
     },
   });
+
+  // Cancela o redirecionamento se o usuário sair da página antes dos 2 segundos.
+  useEffect(() => () => window.clearTimeout(redirecionamento.current), []);
 
   return (
     <div className={styles.container}>

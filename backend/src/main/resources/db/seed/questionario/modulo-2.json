@@ -4,31 +4,160 @@
     {
       "parte": 1,
       "questoes": [
-        { "ordem": 1, "enunciado": "Exemplo de pergunta do módulo 2, parte 1.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "A" },
-        { "ordem": 2, "enunciado": "Exemplo de pergunta do módulo 2, parte 1.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "B" },
-        { "ordem": 3, "enunciado": "Exemplo de pergunta do módulo 2, parte 1.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "C" },
-        { "ordem": 4, "enunciado": "Exemplo de pergunta do módulo 2, parte 1.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "D" },
-        { "ordem": 5, "enunciado": "Exemplo de pergunta do módulo 2, parte 1.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "A" }
+        {
+          "ordem": 1,
+          "enunciado": "Manifesto dos Pioneiros da Educação Nova — 1932 - A Educação Nova, alargando a sua finalidade para além dos limites das classes. assume, com uma feição mais humana, a sua verdadeira função social, preparando- se para formar \"a hierarquia democrática\" pela \"hierarquia das capacidades\", recrutadas em todos os grupos sociais, a que se abrem as mesmas oportunidades de educação. Ela tem, por objeto, organizar e desenvolver os meios de ação durável com o fim de \"dirigir os desenvolvimentos natural e integral do ser humano em cada uma das etapas de seu crescimento\", de acordo com uma certa concepção do mundo. Os autores do manifesto citado procuravam contrapor-se ao caráter oligárquico da sociedade brasileira. Nesse sentido, o trecho propõe uma relação necessária entre",
+          "alternativas": {
+            "A": "ensino técnico e mercado de trabalho.",
+            "B": "acesso à escola e valorização do mérito.",
+            "C": "ampliação de vagas e formação de gestores.",
+            "D": "disponibilidade de financiamento e pesquisa avançada.",
+            "E": "remuneração de professores e extinção do analfabetismo."
+          },
+          "respostaCorreta": "B"
+        },
+        {
+          "ordem": 2,
+          "enunciado": "O governo Vargas, principalmente durante o Estado Novo (1937-1945), pretendeu construir um Estado capaz de criar uma nova sociedade. Uma dimensão-chave desse projeto tinha no território seu foco principal. Não por acaso, foram criadas então instituições encarregadas de fornecer dados confiáveis para a ação do governo, como o Conselho Nacional de Geografia, o Conselho Nacional de Cartografia, o Conselho Nacional de Estatística e o Instituto Brasileiro de Geografia e Estatística (IBGE), este de 1938. A criação dessas instituições pelo governo Vargas representava uma estratégia política de",
+          "alternativas": {
+            "A": "levantar informações para a preservação da paisagem dos sertões.",
+            "B": "controlar o crescimento exponencial da população brasileira.",
+            "C": "obter conhecimento científico das diversidades regionais.",
+            "D": "conter o fluxo migratório do campo para a cidade.",
+            "E": "propor a criação de novas unidades da federação."
+          },
+          "respostaCorreta": "C"
+        },
+        {
+          "ordem": 3,
+          "enunciado": "Durante o Estado Novo, os encarregados da propaganda procuraram aperfeiçoar-se na arte da empolgação e envolvimento das \"multidões\" através das mensagens políticas. Nesse tipo de discurso, o significado das palavras importa pouco, pois, como declarou Goebbels, \"não falamos para dizer alguma coisa, mas para obter determinado efeito\". O controle sobre os meios de comunicação foi uma marca do Estado Novo, sendo fundamental à propaganda política, na medida em que visava",
+          "alternativas": {
+            "A": "conquistar o apoio popular na legitimação do novo governo.",
+            "B": "ampliar o envolvimento das multidões nas decisões políticas.",
+            "C": "aumentar a oferta de informações públicas para a sociedade civil.",
+            "D": "estender a participação democrática dos meios de comunicação no Brasil.",
+            "E": "alargar o entendimento da população sobre as intenções do novo governo."
+          },
+          "respostaCorreta": "A"
+        },
+        {
+          "ordem": 4,
+          "enunciado": "O que o projeto governamental tem em vista é poupar à Nação o prejuízo irreparável do perecimento e da evasão do que há de mais precioso no seu patrimônio. Grande parte das obras de arte até mais valiosas e dos bens de maior interesse histórico, de que a coletividade brasileira era depositária, têm desaparecido ou se arruinado irremediavelmente. As obras de arte típicas e as relíquias da história de cada país não constituem o seu patrimônio privado, e sim um patrimônio comum de todos os povos. A criação no Brasil do Serviço do Patrimônio Histórico Artístico Nacional (SPHAN), em 1937, foi orientada por ideias como as descritas no texto, que visavam",
+          "alternativas": {
+            "A": "submeter a memória e o patrimônio nacional ao controle dos órgãos públicos, de acordo com a tendência autoritária do Estado Novo.",
+            "B": "transferir para a iniciativa privada a responsabilidade de preservação do patrimônio nacional, por meio de leis de incentivo fiscal.",
+            "C": "definir os fatos e personagens históricos a serem cultuados pela sociedade brasileira, de acordo com o interesse público.",
+            "D": "resguardar da destruição as obras representativas da cultura nacional, por meio de políticas públicas preservacionistas.",
+            "E": "determinar as responsabilidades pela destruição do patrimônio nacional, de acordo com a legislação brasileira."
+          },
+          "respostaCorreta": "D"
+        }
       ]
     },
     {
       "parte": 2,
       "questoes": [
-        { "ordem": 1, "enunciado": "Exemplo de pergunta do módulo 2, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "B" },
-        { "ordem": 2, "enunciado": "Exemplo de pergunta do módulo 2, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "C" },
-        { "ordem": 3, "enunciado": "Exemplo de pergunta do módulo 2, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "D" },
-        { "ordem": 4, "enunciado": "Exemplo de pergunta do módulo 2, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "A" },
-        { "ordem": 5, "enunciado": "Exemplo de pergunta do módulo 2, parte 2.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "B" }
+        {
+          "ordem": 1,
+          "enunciado": "Zuenir Ventura, em seu livro \"Minhas memórias dos outros\" (São Paulo: Planeta do Brasil, 2005), referindo-se ao fim a \"Era Vargas\" e ao suicídio do presidente em 1954, comenta: Quase como castigo do destino, dois anos depois eu iria trabalhar no jornal de Carlos Lacerda, o inimigo mortal de Vargas (e nunca esse adjetivo foi tão próprio). Diante daquele contexto histórico, muitos estudiosos acreditam que, com o suicídio, Getúlio Vargas atingiu não apenas a si mesmo, mas o coração de seus aliados e a mente de seus inimigos. A afirmação que aparece \"entre parênteses\" no comentário e uma consequência política que atingiu os inimigos de Vargas aparecem, respectivamente, em:",
+          "alternativas": {
+            "A": "a conspiração envolvendo o jornalista Carlos Lacerda é um dos elementos do desfecho trágico e o recuo da ação de políticos conservadores devido ao impacto da reação popular.",
+            "B": "a tentativa de assassinato sofrida pelo jornalista Carlos Lacerda por apoiar os assessores do presidente que discordavam de suas idéias e o avanço dos conservadores foi intensificado pela ação dos militares.",
+            "C": "o presidente sentiu-se impotente para atender a seus inimigos, como Carlos Lacerda, que o pressionavam contra a ditadura e os aliados do presidente teriam que aguardar mais uma década para concretizar a democracia progressista.",
+            "D": "o jornalista Carlos Lacerda foi responsável direto pela morte do presidente e este fato veio impedir definitivamente a ação de grupos conservadores.",
+            "E": "o presidente cometeu o suicido para garantir uma definitiva e dramática vitória contra seus acusadores e oferecendo a própria vida Vargas facilitou as estratégias de regimes autoritários no país."
+          },
+          "respostaCorreta": "A"
+        },
+        {
+          "ordem": 2,
+          "enunciado": "Decreto-Lei n. 1 949, de 27/12/1937 Art. 1º Fica criado o Departamento de Imprensa e Propaganda (DIP), diretamente subordinado ao presidente da República. Art. 2º O DIP tem por fim: h) coordenar e incentivar as relações da imprensa com os poderes públicos no sentido de maior aproximação da mesma com os fatos que se ligam aos interesses nacionais; n) autorizar mensalmente a devolução dos depósitos efetuados pelas empresas jornalísticas para a importação de papel para imprensa, uma vez demonstrada, a seu juízo, a eficiência e a utilidade pública dos jornais ou periódicos por elas administrados ou dirigidos. Com base nos trechos do decreto, as finalidades do órgão criado permitiram ao governo promover o(a)",
+          "alternativas": {
+            "A": "diversificação da opinião pública.",
+            "B": "mercantilização da cultura popular.",
+            "C": "controle das organizações sindicais.",
+            "D": "cerceamento da liberdade de expressão.",
+            "E": "privatização dos meios de comunicação."
+          },
+          "respostaCorreta": "D"
+        },
+        {
+          "ordem": 3,
+          "enunciado": "A partir de 1942 e estendendo-se até o final do Estado Novo, o Ministro do Trabalho, Indústria e Comércio de Getúlio Vargas falou aos ouvintes da Rádio Nacional semanalmente, por dez minutos, no programa \"Hora do Brasil\". O objetivo declarado do governo era esclarecer os trabalhadores acerca das inovações na legislação de proteção ao trabalho. Os programas \"Hora do Brasil\" contribuíram para",
+          "alternativas": {
+            "A": "conscientizar os trabalhadores de que os direitos sociais foram conquistados por seu esforço, após anos de lutas sindicais.",
+            "B": "promover a autonomia dos grupos sociais, por meio de uma linguagem simples e de fácil entendimento.",
+            "C": "estimular os movimentos grevistas, que reivindicavam um aprofundamento dos direitos trabalhistas.",
+            "D": "consolidar a imagem de Vargas como um governante protetor das massas.",
+            "E": "aumentar os grupos de discussão política dos trabalhadores, estimulados pelas palavras do ministro."
+          },
+          "respostaCorreta": "D"
+        },
+        {
+          "ordem": 4,
+          "enunciado": "Em toda a sua carreira política, Getúlio Vargas sempre contara com o seu talento pessoal de persuasão e poder de manipulação. Agora, porém, seus amigos começavam a perceber que ele parecia envelhecido e cansado. A principal figura da oposição, concordavam eles, era o belicoso jornalista Carlos Lacerda. Se ao menos pudessem “removê-lo” do cenário político, talvez Vargas se salvasse da situação. Esses seguidores decidiram tomar o assunto em suas próprias mãos com o atentado da Rua Tonelero. Nesse contexto, a ação dos aliados de Getúlio Vargas teve como consequência imediata o(a)",
+          "alternativas": {
+            "A": "intensificação dos ataques do grupo udenista.",
+            "B": "intervenção dos sindicatos no conflito partidário.",
+            "C": "mobilização da sociedade na defesa do governo.",
+            "D": "abandono da censura aos meios de comunicação.",
+            "E": "apoio dos parlamentares aos candidatos oposicionistas."
+          },
+          "respostaCorreta": "A"
+        }
       ]
     },
     {
       "parte": 3,
       "questoes": [
-        { "ordem": 1, "enunciado": "Exemplo de pergunta do módulo 2, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "C" },
-        { "ordem": 2, "enunciado": "Exemplo de pergunta do módulo 2, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "D" },
-        { "ordem": 3, "enunciado": "Exemplo de pergunta do módulo 2, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "A" },
-        { "ordem": 4, "enunciado": "Exemplo de pergunta do módulo 2, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "B" },
-        { "ordem": 5, "enunciado": "Exemplo de pergunta do módulo 2, parte 3.", "alternativas": { "A": "Alternativa A", "B": "Alternativa B", "C": "Alternativa C", "D": "Alternativa D" }, "respostaCorreta": "C" }
+        {
+          "ordem": 1,
+          "enunciado": "Em 1935, o governo brasileiro começou a negar vistos a judeus. Posteriormente, durante o Estado Novo, uma circular secreta proibiu a concessão de vistos a \"pessoas de origem semita\", inclusive turistas e negociantes, o que causou uma queda de 75% da imigração judaica ao longo daquele ano. Entretanto, mesmo com as imposições da lei, muitos judeus continuaram entrando ilegalmente no país durante a guerra e as ameaças de deportação em massa nunca foram concretizadas, apesar da extradição de alguns indivíduos por sua militância política. Uma razão para a adoção da política de imigração mencionada no texto foi o(a)",
+          "alternativas": {
+            "A": "receio do controle sionista sobre a economia nacional.",
+            "B": "reserva de postos de trabalho para a mão de obra local.",
+            "C": "oposição do clero católico à expansão de novas religiões.",
+            "D": "apoio da diplomacia varguista às opiniões dos líderes árabes.",
+            "E": "simpatia de membros da burocracia pelo projeto totalitário alemão."
+          },
+          "respostaCorreta": "E"
+        },
+        {
+          "ordem": 2,
+          "enunciado": "A regulação das relações de trabalho compõe uma estrutura complexa, em que cada elemento se ajusta aos demais. A Justiça do Trabalho é apenas uma das peças dessa vasta engrenagem. A presença de representantes classistas na composição dos órgãos da Justiça do Trabalho é também resultante da montagem dessa regulação. O poder normativo também reflete essa característica. Instituída pela Constituição de 1934, a Justiça do Trabalho só vicejou no ambiente político do Estado Novo instaurado em 1937 A criação da referida instituição estatal na conjuntura histórica abordada teve por objetivo",
+          "alternativas": {
+            "A": "legitimar os protestos fabris.",
+            "B": "ordenar os conflitos laborais.",
+            "C": "oficializar os sindicatos plurais.",
+            "D": "assegurar os princípios liberais.",
+            "E": "unificar os salários profissionais."
+          },
+          "respostaCorreta": "B"
+        },
+        {
+          "ordem": 3,
+          "enunciado": "Bandeira do Brasil, és hoje a única. Hasteada a esta hora em todo o território nacional, única e só, não há lugar no coração do Brasil para outras flâmulas, outras bandeira, outros símbolos. Os brasileiros se reuniram em torno do Brasil e decretaram desta vez com determinação de não consentir que a discórdia volte novamente a dividi-lo! O discurso proferido em uma celebração em que as bandeiras estaduais eram queimadas diante da bandeira nacional revela o pacto nacional proposto pelo Estado Novo, que se associa à",
+          "alternativas": {
+            "A": "supressão das diferenças socioeconômicas entre as regiões do Brasil, priorizando as regiões estaduais carentes.",
+            "B": "orientação do regime quanto ao reforço do federalismo, espelhando-se na experiência política norte-americana.",
+            "C": "adoção de práticas políticas autoritárias, considerando a contenção dos interesses regionais dispersivos.",
+            "D": "propagação de uma cultura política avessa aos ritos cívicos, cultivados pela cultura regional brasileira.",
+            "E": "defesa da unidade do território nacional, ameaçado por movimentos separatistas contrários à política varguista."
+          },
+          "respostaCorreta": "C"
+        },
+        {
+          "ordem": 4,
+          "enunciado": "A experiência do movimento organizado de mulheres no Brasil oferece excelente exemplo de como se pode utilizar a lei em favor da melhoria do status jurídico, da condição social, do avanço no sentido de uma presença mais efetiva no processo de decisão política. Ao longo de quase todo o século XX, com mais intensidade em algumas décadas do que em outras, as mulheres brasileiras conseguiram obter vitórias expressivas. Algumas vezes, abolindo dispositivos legais discriminatórios, outras, conseguindo aprovar novas leis. A atuação do movimento social abordado no texto resultou, na década de 1930, em",
+          "alternativas": {
+            "A": "direito de voto.",
+            "B": "garantia de cotas.",
+            "C": "acesso ao trabalho.",
+            "D": "organização partidária.",
+            "E": "igualdade de oportunidades."
+          },
+          "respostaCorreta": "A"
+        }
       ]
     }
   ]

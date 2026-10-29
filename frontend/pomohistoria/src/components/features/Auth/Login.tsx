@@ -1,9 +1,9 @@
-import FundoForm from '../../../assets/FundoForm (1).png';
+import FundoForm from '../../../assets/FundoForm-_1_.webp';
 import styles from '../../Modal/Form.module.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../hooks/useAuth';
-import { authApi } from '../../../services/authApi';
-import { validateEmail, validatePassword } from '../../../utils/validation';
+import { useSessao } from '../../../hooks/useSessao';
+import { validateEmail } from '../../../utils/validation';
 import type { LoginRequest } from '../../../types';
 
 const initialValues: LoginRequest = {
@@ -13,6 +13,10 @@ const initialValues: LoginRequest = {
 
 export default function Login() {
   const navigate = useNavigate();
+  const location = useLocation();
+  const { entrar } = useSessao();
+  // Página que o usuário tentou abrir antes de ser mandado ao login.
+  const destino = (location.state as { from?: string } | null)?.from ?? '/';
   const {
     values,
     errors,
@@ -28,19 +32,14 @@ export default function Login() {
       if (!email.trim()) validationErrors.email = 'Email é obrigatório';
       else if (!validateEmail(email.trim())) validationErrors.email = 'Email inválido';
 
+      // Sem regra de tamanho no login: contas antigas podem ter senhas mais curtas que a regra atual.
       if (!senha) validationErrors.senha = 'Senha é obrigatória';
-      else if (!validatePassword(senha)) {
-        validationErrors.senha = 'Senha deve ter no mínimo 6 caracteres';
-      }
 
       return validationErrors;
     },
     onSubmit: async ({ email, senha }) => {
-      await authApi.entrar({
-        email: email.trim().toLowerCase(),
-        senha,
-      });
-      navigate('/');
+      await entrar(email.trim().toLowerCase(), senha);
+      navigate(destino, { replace: true });
     },
   });
 

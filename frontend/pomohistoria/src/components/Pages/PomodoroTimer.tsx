@@ -1,10 +1,13 @@
 import { Link } from 'react-router-dom'
-import background from '../../assets/FundoHomeInicial.jpeg'
-import logo from '../../assets/POMOHISTÓRIA.png'
+import { useFundoDoModulo } from '../../hooks/useFundoDoModulo'
+import { useSessao } from '../../hooks/useSessao'
+import logo from '../../assets/POMOHISTÓRIA.webp'
 import PomodoroTimerCard from '../PomodoroTimerCard'
 import styles from '../Modal/PomodoroTimer.module.css'
 
 export default function PomodoroTimer() {
+  const background = useFundoDoModulo()
+  const { usuario } = useSessao()
   return (
     <main className={styles.page}>
       <img
@@ -25,6 +28,9 @@ export default function PomodoroTimer() {
           </summary>
           <nav className={styles.menuDropdown} aria-label="Navegação">
             <Link className={styles.link} to="/profile">Meu perfil</Link>
+            {usuario?.papel === 'ADMIN' && (
+              <Link className={styles.link} to="/admin">Administração</Link>
+            )}
             <Link className={styles.link} to="/">Início</Link>
           </nav>
         </details>

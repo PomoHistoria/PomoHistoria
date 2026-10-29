@@ -21,7 +21,7 @@ interface UseAuthReturn<FormValues> {
   setFieldValue: (field: keyof FormValues, value: FormValues[keyof FormValues]) => void;
   setErrors: (errors: FormErrors<FormValues>) => void;
 }
-export function useAuth<FormValues extends Record<string, any>>(
+export function useAuth<FormValues extends object>(
   options: UseAuthOptions<FormValues>
 ): UseAuthReturn<FormValues> {
   const { initialValues, onSubmit, validate } = options;
@@ -71,15 +71,15 @@ export function useAuth<FormValues extends Record<string, any>>(
         setSuccessMessage('Operação realizada com sucesso!');
         setValues(initialValues);
       } catch (error) {
-        setErrors({
-          ...errors,
+        setErrors((anteriores) => ({
+          ...anteriores,
           geral: error instanceof Error ? error.message : 'Erro ao processar formulário',
-        });
+        }));
       } finally {
         setIsLoading(false);
       }
     },
-    [values, initialValues, validate, onSubmit, errors]
+    [values, initialValues, validate, onSubmit]
   );
 
   const resetForm = useCallback(() => {

@@ -50,9 +50,10 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-json</artifactId>
 		</dependency>
+		<!-- No Spring Boot 4 a autoconfiguração do Flyway fica neste starter; só o flyway-core não roda as migrações. -->
 		<dependency>
-			<groupId>org.flywaydb</groupId>
-			<artifactId>flyway-core</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-flyway</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.flywaydb</groupId>
@@ -100,5 +101,29 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<profiles>
+		<!--
+			PostgreSQL real e embutido para os testes de integração (não precisa de Docker nem de banco local).
+			Fica ativo sempre, exceto no build da imagem Docker, que passa -Ddocker e pula os testes:
+			assim a imagem não baixa os ~75 MB de binários do PostgreSQL de teste.
+		-->
+		<profile>
+			<id>testes-com-banco-embutido</id>
+			<activation>
+				<property>
+					<name>!docker</name>
+				</property>
+			</activation>
+			<dependencies>
+				<dependency>
+					<groupId>io.zonky.test</groupId>
+					<artifactId>embedded-postgres</artifactId>
+					<version>2.1.0</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
 
 </project>

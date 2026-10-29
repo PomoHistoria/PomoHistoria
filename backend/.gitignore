@@ -31,3 +31,8 @@ build/
 
 ### VS Code ###
 .vscode/
+
+### Variáveis de ambiente locais (o modelo .env.example é versionado) ###
+.env
+.env.*
+!.env.example

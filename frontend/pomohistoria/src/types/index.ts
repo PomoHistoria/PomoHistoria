@@ -3,8 +3,22 @@ export interface User {
   id: string;
   nome: string;
   email: string;
+  telefone: string | null;
+  /** Data URL da foto de perfil (já reduzida). */
+  foto: string | null;
   dataCriacao: string;
   ativo: boolean;
+  papel: 'USER' | 'ADMIN';
+}
+
+/** Dados enviados ao salvar o perfil. */
+export interface PerfilRequest {
+  nome: string;
+  telefone: string;
+  email: string;
+  /** Obrigatória só para trocar email ou senha. */
+  senhaAtual: string | null;
+  novaSenha: string | null;
 }
 
 /** Interface para requisição de cadastro */
@@ -63,7 +77,7 @@ export interface ValidationConfig {
   regra: ValidationRule;
   valor?: string | number;
   mensagem: string;
-  validador?: (valor: any) => boolean;
+  validador?: (valor: unknown) => boolean;
 }
 
 /** Configuração de campo de formulário */
@@ -94,7 +108,7 @@ export interface FormConfig {
 }
 
 /** Estado completo de um formulário */
-export interface FormState<T extends Record<string, any>> {
+export interface FormState<T extends object> {
   valores: T;
   erros: Partial<Record<keyof T, string>>;
   tocados: Partial<Record<keyof T, boolean>>;
@@ -126,7 +140,7 @@ export interface AuthContext {
 export interface RequestOptions {
   method: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   headers?: Record<string, string>;
-  body?: any;
+  body?: unknown;
   timeout?: number;
   retry?: number;
   cacheTime?: number;
@@ -139,7 +153,7 @@ export interface ApiResponse<T> {
   erro?: {
     codigo: string;
     mensagem: string;
-    detalhes?: Record<string, any>;
+    detalhes?: Record<string, unknown>;
   };
   timestamp: Date;
 }

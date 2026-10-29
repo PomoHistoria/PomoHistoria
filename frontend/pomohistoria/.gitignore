@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Variáveis de ambiente: .env e *.local ficam fora do git; .env.example, .env.development e .env.production são versionados (sem segredos)
+.env
