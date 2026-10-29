@@ -10,12 +10,16 @@ export default function PomodoroTimer() {
   const { usuario } = useSessao()
   return (
     <main className={styles.page}>
-      <img
-        className={styles.background}
-        src={background}
-        alt=""
-        aria-hidden="true"
-      />
+      {/* Enquanto o fundo não é conhecido, aparece só a cor sólida da página. A key reinicia o esmaecimento ao trocar. */}
+      {background && (
+        <img
+          key={background}
+          className={styles.background}
+          src={background}
+          alt=""
+          aria-hidden="true"
+        />
+      )}
       <div className={styles.shade} aria-hidden="true" />
 
       <header className={styles.header}>

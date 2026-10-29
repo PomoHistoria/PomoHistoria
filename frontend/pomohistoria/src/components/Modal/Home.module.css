@@ -3,7 +3,7 @@
   min-height: 100dvh;
   overflow: hidden;
   isolation: isolate;
-  background: #133b4b;
+  background: #4d1f00;
   color: #fff;
 }
 
@@ -15,6 +15,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+  animation: fundo-aparece 0.35s ease-out;
 }
 
 .shade {
@@ -177,5 +178,21 @@
   .action {
     padding: 0.65rem 0.7rem;
     font-size: 0.75rem;
+  }
+}
+
+@keyframes fundo-aparece {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .background {
+    animation: none;
   }
 }

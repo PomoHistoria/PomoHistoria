@@ -3,6 +3,7 @@ import type { ChangeEvent, SubmitEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useSessao } from '../../hooks/useSessao'
 import { apagarCronometrosSalvos } from '../../hooks/PomodoroTimersContext'
+import { apagarFundoSalvo } from '../../hooks/useFundoDoModulo'
 import { reduzirImagem, usuarioApi } from '../../services/usuarioApi'
 import { validateEmail, validateName, validatePassword } from '../../utils/validation'
 import logo from '../../assets/POMOHISTÓRIA.webp'
@@ -53,7 +54,10 @@ export default function Profile() {
     setErroExclusao('')
     try {
       await usuarioApi.excluirConta(senhaExclusao)
-      if (usuario) apagarCronometrosSalvos(usuario.id)
+      if (usuario) {
+        apagarCronometrosSalvos(usuario.id)
+        apagarFundoSalvo(usuario.id)
+      }
       // Sem usuário, a proteção da rota leva ao login, que mostra o aviso.
       limparSessao('Sua conta foi excluída.')
     } catch (error) {
