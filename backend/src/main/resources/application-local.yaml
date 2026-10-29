@@ -1,0 +1,16 @@
+spring:
+  config:
+    # Lê backend/.env (se existir) só no desenvolvimento local. Variáveis do sistema têm prioridade.
+    import: optional:file:.env[.properties]
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/pomohistoria}
+    username: ${SPRING_DATASOURCE_USERNAME:postgres}
+    password: ${SPRING_DATASOURCE_PASSWORD:${DB_PASSWORD:}}
+
+server:
+  servlet:
+    session:
+      cookie:
+        # Em http://localhost não há HTTPS, e front e back estão no mesmo "site".
+        secure: false
+        same-site: lax

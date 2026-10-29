@@ -1,0 +1,308 @@
+.profile {
+  --brown: #4d1f00;
+  --orange: #ff9800;
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  background: #f8f1e8;
+  color: #111;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.profile::before {
+  position: absolute;
+  inset: 0;
+  opacity: 0.42;
+  background:
+    radial-gradient(circle at 24% 18%, transparent 0 5rem, #e9cdb0 5.1rem 5.2rem, transparent 5.3rem),
+    radial-gradient(circle at 88% 78%, transparent 0 6rem, #efd7bd 6.1rem 6.2rem, transparent 6.3rem),
+    linear-gradient(135deg, transparent 48%, #eed7bf 49% 49.2%, transparent 49.3%);
+  content: '';
+  pointer-events: none;
+}
+
+.sidebar {
+  display: flex;
+  position: fixed;
+  z-index: 2;
+  inset: 0 auto 0 0;
+  width: 11rem;
+  flex-direction: column;
+  align-items: center;
+  background: var(--brown);
+  color: #fff;
+}
+
+.sidebarLogo {
+  width: 8rem;
+  margin: 0.4rem 0 1.4rem;
+}
+
+.userSummary {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.45rem;
+  font-size: 0.7rem;
+}
+
+.smallAvatar,
+.avatar {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+  background: #e1e1e1;
+}
+
+.smallAvatar {
+  width: 4.2rem;
+  height: 4.2rem;
+}
+
+.smallAvatar::before,
+.avatar::before {
+  position: absolute;
+  top: 20%;
+  left: 35%;
+  width: 30%;
+  height: 30%;
+  border-radius: 50%;
+  background: #fff;
+  content: '';
+}
+
+.smallAvatar::after,
+.avatar::after {
+  position: absolute;
+  right: 20%;
+  bottom: 15%;
+  left: 20%;
+  height: 35%;
+  border-radius: 50% 50% 15% 15%;
+  background: #fff;
+  content: '';
+}
+
+.logout {
+  width: 80%;
+  margin-top: auto;
+  margin-bottom: 1rem;
+  padding: 0.3rem;
+  border-radius: 0.45rem;
+  background: #bd4b00;
+  color: #fff;
+  text-align: center;
+  text-decoration: none;
+}
+
+.header {
+  position: absolute;
+  top: 0;
+  left: 11rem;
+  display: none;
+}
+
+.logo {
+  width: 10rem;
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  min-height: 100dvh;
+  margin-left: 11rem;
+  padding: 2rem clamp(2rem, 7vw, 7rem);
+  box-sizing: border-box;
+}
+
+.back,
+.save {
+  border: 0;
+  border-radius: 0.45rem;
+  color: #fff;
+  font-size: 1rem;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+.back {
+  display: block;
+  width: max-content;
+  margin-left: auto;
+  padding: 0.35rem 0.7rem;
+  background: #b94b00;
+}
+
+.form {
+  display: grid;
+  position: relative;
+  grid-template-columns: 7.5rem minmax(18rem, 35rem);
+  gap: 1rem;
+  max-width: 45rem;
+  margin: 1.4rem auto 0;
+}
+
+.photoColumn {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.avatar {
+  width: 6rem;
+  height: 6rem;
+}
+
+/* A foto fica acima da silhueta desenhada com ::before/::after. */
+.avatar img,
+.smallAvatar img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.photoLabel {
+  cursor: pointer;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.photoInput {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.fields h1,
+.fields h2,
+.fieldGrid span {
+  margin: 0;
+  color: #080808;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.fields input {
+  width: 100%;
+  min-height: 1.6rem;
+  border: 0;
+  border-radius: 0;
+  padding: 0.2rem 0.45rem;
+  box-sizing: border-box;
+  background: #c8c8c8;
+  color: #555;
+  font: 0.78rem Arial, sans-serif;
+}
+
+.fields input:focus {
+  outline: 2px solid var(--orange);
+  outline-offset: 1px;
+}
+
+.fieldGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.35rem 1.2rem;
+  margin-top: 0.35rem;
+}
+
+.fieldGrid label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.save {
+  position: fixed;
+  right: 3.5rem;
+  bottom: 1rem;
+  padding: 0.45rem 1.7rem;
+  cursor: pointer;
+  background: var(--orange);
+}
+
+.feedback {
+  position: fixed;
+  right: 3.5rem;
+  bottom: 3.8rem;
+  max-width: min(28rem, calc(100vw - 7rem));
+  margin: 0;
+  color: #4d1f00;
+  font-size: 0.8rem;
+  text-align: right;
+}
+
+.feedbackErro {
+  color: #b00020;
+  font-weight: 700;
+}
+
+.save:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+.hint {
+  margin: 0 0 0.2rem;
+  color: #555;
+  font-size: 0.7rem;
+}
+
+@media (max-width: 700px) {
+  .sidebar {
+    position: absolute;
+    width: 5.3rem;
+  }
+
+  .sidebarLogo {
+    width: 4.8rem;
+  }
+
+  .userSummary strong {
+    font-size: 0.55rem;
+    text-align: center;
+  }
+
+  .smallAvatar {
+    width: 3.2rem;
+    height: 3.2rem;
+  }
+
+  .content {
+    margin-left: 5.3rem;
+    padding: 1rem;
+  }
+
+  .form {
+    grid-template-columns: 1fr;
+    margin-top: 2rem;
+  }
+
+  .photoColumn {
+    align-items: flex-start;
+  }
+
+  .fieldGrid {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  .save {
+    right: 1rem;
+  }
+
+  .feedback {
+    right: 1rem;
+  }
+}

@@ -1,0 +1,181 @@
+.home {
+  position: relative;
+  min-height: 100dvh;
+  overflow: hidden;
+  isolation: isolate;
+  background: #133b4b;
+  color: #fff;
+}
+
+.background {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.shade {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background:
+    linear-gradient(180deg, rgba(0, 0, 0, 0.35), transparent 24%),
+    linear-gradient(90deg, rgba(0, 0, 0, 0.2), transparent 35%);
+}
+
+.header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: clamp(1rem, 3vw, 2rem);
+}
+
+.logo {
+  width: clamp(8rem, 18vw, 13rem);
+  height: auto;
+  filter: drop-shadow(0 2px 2px rgb(0 0 0 / 70%));
+}
+
+.profileMenu {
+  position: relative;
+}
+
+.profileButton,
+.action {
+  border: 2px solid #281104;
+  border-radius: 0.75rem;
+  background: #6b2704;
+  box-shadow: 0 0.25rem 0.4rem rgb(0 0 0 / 35%);
+  color: #fff;
+  font: 700 clamp(0.8rem, 1.6vw, 1.15rem) Georgia, serif;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background-color 160ms ease, transform 160ms ease;
+}
+
+.profileButton {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.65rem 0.9rem;
+  cursor: pointer;
+}
+
+.profileButton::-webkit-details-marker {
+  display: none;
+}
+
+.profileButton::after {
+  content: '▾';
+  font-size: 0.8em;
+}
+
+.profileIcon {
+  display: grid;
+  width: 1.8rem;
+  height: 1.8rem;
+  place-items: center;
+  border-radius: 50%;
+  background: #eee;
+  color: #6b2704;
+  font-size: 1.1rem;
+}
+
+.profileMenu[open] .profileButton,
+.profileButton:hover,
+.profileButton:focus-visible,
+.action:hover,
+.action:focus-visible {
+  background: #873507;
+  transform: translateY(-2px);
+}
+
+.profileDropdown {
+  position: absolute;
+  right: 0;
+  z-index: 1;
+  min-width: 10rem;
+  margin-top: 0.5rem;
+  padding: 0.45rem;
+  border: 2px solid #281104;
+  border-radius: 0.6rem;
+  background: #fff8ed;
+  box-shadow: 0 0.3rem 0.6rem rgb(0 0 0 / 35%);
+}
+
+.profileLink {
+  display: block;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.35rem;
+  color: #4d1a05;
+  font: 700 0.95rem Georgia, serif;
+  text-decoration: none;
+}
+
+.profileLink:hover,
+.profileLink:focus-visible {
+  background: #f0d6b8;
+}
+
+.timerArea {
+  position: absolute;
+  top: 50%;
+  left: clamp(1rem, 4vw, 4rem);
+  z-index: 1;
+  width: min(22rem, calc(100% - 2rem));
+  transform: translateY(-50%);
+}
+
+.actions {
+  display: flex;
+  position: absolute;
+  top: 50%;
+  right: clamp(1rem, 4vw, 4rem);
+  flex-direction: column;
+  gap: 0.8rem;
+  transform: translateY(-50%);
+}
+
+.action {
+  padding: 0.75rem 1rem;
+}
+
+@media (max-width: 600px) {
+  .header {
+    align-items: center;
+  }
+
+  .profileButton {
+    padding: 0.5rem;
+  }
+
+  .profileButton > span:not(.profileIcon) {
+    display: none;
+  }
+
+  .actions {
+    top: auto;
+    right: 50%;
+    bottom: 1.25rem;
+    flex-direction: row;
+    width: max-content;
+    max-width: calc(100% - 2rem);
+    transform: translateX(50%);
+  }
+
+  .timerArea {
+    top: 55%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  .action {
+    padding: 0.65rem 0.7rem;
+    font-size: 0.75rem;
+  }
+}
