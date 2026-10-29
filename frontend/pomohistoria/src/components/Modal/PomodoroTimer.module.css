@@ -5,7 +5,7 @@
   flex-direction: column;
   overflow: hidden;
   isolation: isolate;
-  background: #133b4b;
+  background: #4d1f00;
   color: #fff;
   font-family: Arial, Helvetica, sans-serif;
 }
@@ -18,6 +18,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+  animation: fundo-aparece 0.35s ease-out;
 }
 
 .shade {
@@ -233,5 +234,21 @@
   .timers {
     width: min(100% - 1rem, 22rem);
     padding-bottom: 1.5rem;
+  }
+}
+
+@keyframes fundo-aparece {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .background {
+    animation: none;
   }
 }

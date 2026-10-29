@@ -20,11 +20,16 @@ export default function Home() {
   const ativos = CRONOMETROS.filter(({ id }) => timerAtivo(timers[id]))
   return (
     <main className={styles.home}>
-      <img
-        className={styles.background}
-        src={background}
-        alt="Praça ensolarada com um estudante no centro"
-      />
+      {/* Enquanto o fundo não é conhecido, aparece só a cor sólida da página. A key reinicia o esmaecimento ao trocar. */}
+      {background && (
+        <img
+          key={background}
+          className={styles.background}
+          src={background}
+          alt=""
+          aria-hidden="true"
+        />
+      )}
       <div className={styles.shade} aria-hidden="true" />
 
       <header className={styles.header}>
