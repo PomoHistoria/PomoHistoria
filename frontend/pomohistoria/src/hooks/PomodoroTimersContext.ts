@@ -16,3 +16,12 @@ export type PomodoroTimersContextValue = {
 }
 
 export const PomodoroTimersContext = createContext<PomodoroTimersContextValue | null>(null)
+
+/**
+ * Cronômetro "ativo": rodando, ou pausado no meio da sessão (para poder ser retomado).
+ * Parado no tempo cheio ou já terminado (00:00) não conta.
+ */
+export function timerAtivo(timer: PomodoroTimerState): boolean {
+  if (timer.isRunning) return true
+  return timer.remainingSeconds > 0 && timer.remainingSeconds < timer.durationMinutes * 60
+}

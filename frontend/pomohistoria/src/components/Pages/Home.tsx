@@ -3,12 +3,21 @@ import { useFundoDoModulo } from '../../hooks/useFundoDoModulo'
 import { useSessao } from '../../hooks/useSessao'
 import logo from '../../assets/POMOHISTÓRIA.webp'
 import PomodoroTimerCard from '../PomodoroTimerCard'
+import { usePomodoroTimers } from '../../hooks/usePomodoroTimers'
+import { timerAtivo, type TimerId } from '../../hooks/PomodoroTimersContext'
 import timerStyles from '../Modal/PomodoroTimer.module.css'
 import styles from '../Modal/Home.module.css'
+
+const CRONOMETROS: { id: TimerId; titulo: string }[] = [
+  { id: 'focus', titulo: 'Sessão de Foco' },
+  { id: 'rest', titulo: 'Sessão de Descanso' },
+]
 
 export default function Home() {
   const background = useFundoDoModulo()
   const { usuario } = useSessao()
+  const { timers } = usePomodoroTimers()
+  const ativos = CRONOMETROS.filter(({ id }) => timerAtivo(timers[id]))
   return (
     <main className={styles.home}>
       <img
@@ -35,12 +44,16 @@ export default function Home() {
         </details>
       </header>
 
-      <section className={styles.timerArea} aria-label="Temporizadores Pomodoro">
-        <div className={timerStyles.timers}>
-          <PomodoroTimerCard id="focus" title="Sessão de Foco" />
-          <PomodoroTimerCard id="rest" title="Sessão de Descanso" />
-        </div>
-      </section>
+      {/* Só os cronômetros ativados na página Pomodoro aparecem no início. */}
+      {ativos.length > 0 && (
+        <section className={styles.timerArea} aria-label="Temporizadores Pomodoro ativos">
+          <div className={timerStyles.timers}>
+            {ativos.map(({ id, titulo }) => (
+              <PomodoroTimerCard key={id} id={id} title={titulo} />
+            ))}
+          </div>
+        </section>
+      )}
 
       <nav className={styles.actions} aria-label="Atividades">
         <Link className={styles.action} to="/temporizador">Pomodoro</Link>
