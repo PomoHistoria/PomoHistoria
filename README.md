@@ -26,6 +26,7 @@ O **PomoHistória** é uma plataforma de estudo de História que junta a **técn
 - Questionário dividido em módulos e partes. A correção é feita no servidor e o progresso fica salvo por usuário.
 - Fundo da tela inicial que muda conforme o módulo que o estudante já abriu.
 - Perfil editável: nome, telefone, e-mail, senha e foto.
+- Exclusão da própria conta, com confirmação por senha. O progresso é apagado junto. Contas de administrador não podem ser excluídas por aqui, para o sistema nunca ficar sem quem edite as questões.
 
 **Para o administrador**
 - Tela para editar o enunciado, as alternativas e a resposta correta de cada questão.
@@ -156,7 +157,7 @@ Abra `http://localhost:5173`. O arquivo `.env.development` já aponta o frontend
 
 ## Testes
 
-**Backend:** são 40 testes, entre unitários e de integração. Eles sobem um PostgreSQL embutido automaticamente, então não precisam de banco local nem do `.env`.
+**Backend:** são 43 testes, entre unitários e de integração. Eles sobem um PostgreSQL embutido automaticamente, então não precisam de banco local nem do `.env`.
 
 ```powershell
 cd backend
@@ -202,7 +203,7 @@ As variáveis principais estão abaixo. A lista completa, comentada, está em [`
 - **CSRF:** obrigatório em toda requisição que altera dados.
 - **CORS:** restrito às origens configuradas.
 - **Tentativas de login:** limitadas por e-mail e por IP. As respostas não revelam se um e-mail está cadastrado.
-- **Dados sensíveis:** trocar e-mail ou senha exige a senha atual. O gabarito só sai pelas rotas de admin.
+- **Dados sensíveis:** trocar e-mail ou senha, ou excluir a conta, exige a senha atual. O gabarito só sai pelas rotas de admin.
 - **Container:** o backend roda sem privilégios de root.
 
 ## Deploy

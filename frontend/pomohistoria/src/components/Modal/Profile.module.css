@@ -259,6 +259,95 @@
   font-size: 0.7rem;
 }
 
+/* Exclusão de conta: separada do formulário, alinhada com a coluna dos campos. */
+.dangerZone {
+  max-width: 35rem;
+  margin: 2.5rem auto 6rem;
+  padding: 0.9rem 1.1rem;
+  box-sizing: border-box;
+  border: 1px solid #e3b5aa;
+  border-radius: 0.6rem;
+  background: #fff6f3;
+  transform: translateX(3.375rem);
+}
+
+.dangerZone h2 {
+  margin: 0 0 0.25rem;
+  color: #8a1c0c;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.dangerZone .hint {
+  margin-bottom: 0.7rem;
+}
+
+.dangerButton,
+.cancelButton {
+  border: 0;
+  border-radius: 0.45rem;
+  padding: 0.45rem 1rem;
+  cursor: pointer;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.dangerButton {
+  background: #b3261e;
+  color: #fff;
+}
+
+.dangerButton:hover:not(:disabled) {
+  background: #8c1d17;
+}
+
+.cancelButton {
+  background: #e1e1e1;
+  color: #333;
+}
+
+.dangerButton:disabled,
+.cancelButton:disabled {
+  cursor: wait;
+  opacity: 0.6;
+}
+
+.dangerConfirm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-width: 24rem;
+}
+
+.dangerConfirm input {
+  width: 100%;
+  min-height: 1.6rem;
+  border: 0;
+  padding: 0.2rem 0.45rem;
+  box-sizing: border-box;
+  background: #c8c8c8;
+  color: #555;
+  font: 0.78rem Arial, sans-serif;
+}
+
+.dangerConfirm input:focus {
+  outline: 2px solid #b3261e;
+  outline-offset: 1px;
+}
+
+.dangerErro {
+  margin: 0;
+  color: #b00020;
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.dangerActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
 @media (max-width: 700px) {
   .sidebar {
     position: absolute;
@@ -287,6 +376,10 @@
   .form {
     grid-template-columns: 1fr;
     margin-top: 2rem;
+  }
+
+  .dangerZone {
+    transform: none;
   }
 
   .photoColumn {

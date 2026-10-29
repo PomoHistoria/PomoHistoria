@@ -20,7 +20,7 @@ O frontend conversa com o backend Spring Boot por sessão (cookie). Todas as cha
 
 Cada área tem seu serviço:
 - `authApi.ts`: cadastro, login, logout e usuário atual;
-- `usuarioApi.ts`: perfil e foto;
+- `usuarioApi.ts`: perfil, foto e exclusão da conta;
 - `questionarioApi.ts`: progresso, questões, início de módulo e envio das respostas;
 - `adminApi.ts`: edição de questões.
 

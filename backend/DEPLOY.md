@@ -63,6 +63,7 @@ Toda rota que não seja GET exige o header `X-XSRF-TOKEN`.
 | GET | `/api/auth/me` | logado | Usuário atual (401 se não houver login) |
 | PUT | `/api/usuarios/me` | logado | Salvar perfil; trocar email ou senha exige `senhaAtual` |
 | PUT | `/api/usuarios/me/foto` | logado | Salvar ou remover (`null`) a foto |
+| DELETE | `/api/usuarios/me` | logado (só USER) | Excluir a própria conta, com `senhaAtual`; apaga o progresso junto e encerra a sessão (204). ADMIN recebe 403 |
 | GET | `/api/questionario/progresso` | logado | Etapas, módulo atual e módulos já abertos |
 | POST | `/api/questionario/modulos/{m}/iniciar` | logado | Marca que o módulo foi aberto (troca o fundo) |
 | GET | `/api/questionario/modulos/{m}/partes/{p}` | logado | Questões da etapa, sem o gabarito |

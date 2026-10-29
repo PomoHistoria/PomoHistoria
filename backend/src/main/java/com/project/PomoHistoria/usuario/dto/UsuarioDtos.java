@@ -74,4 +74,12 @@ public final class UsuarioDtos {
             String foto
     ) {
     }
+
+    /** Confirmação da exclusão da conta. */
+    public record ExclusaoContaRequest(
+            @NotBlank(message = "Informe sua senha para excluir a conta.")
+            @Size(max = 255, message = "Senha atual inválida.")
+            String senhaAtual
+    ) {
+    }
 }

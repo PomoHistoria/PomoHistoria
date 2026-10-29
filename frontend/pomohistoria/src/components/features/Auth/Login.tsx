@@ -14,7 +14,7 @@ const initialValues: LoginRequest = {
 export default function Login() {
   const navigate = useNavigate();
   const location = useLocation();
-  const { entrar } = useSessao();
+  const { entrar, aviso } = useSessao();
   // Página que o usuário tentou abrir antes de ser mandado ao login.
   const destino = (location.state as { from?: string } | null)?.from ?? '/';
   const {
@@ -58,6 +58,12 @@ export default function Login() {
       <div className={styles.formSection}>
         <div className={styles.formContainer}>
           <h1 className={styles.title}>LOGIN</h1>
+
+          {aviso && !errors.geral && !successMessage && (
+            <div className={styles.successMessage} role="status">
+              {aviso}
+            </div>
+          )}
 
           {errors.geral && (
             <div className={styles.errorMessage} role="alert">
