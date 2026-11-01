@@ -48,13 +48,22 @@ As regras ficam em `src/routes/RequireAuth.tsx`. O fundo do Início e do Tempori
 | `.env.local` | sobrescreve os de cima só na sua máquina | não |
 | `.env.example` | modelo com explicações | sim |
 
-Em produção, defina `VITE_API_BASE_URL` (URL do backend, sem barra no final) nas variáveis da plataforma que faz o build, ou preencha `.env.production`, e gere um novo build. Se a variável estiver vazia, o site mostra um aviso claro em vez de tentar acessar `localhost`.
+Em produção, defina `VITE_API_BASE_URL` com a URL do **próprio frontend**, sem barra no final (ex.: `https://pomohistoria-1.onrender.com`), e gere um novo build. A variável pode ficar nas configurações da plataforma que faz o build ou em `.env.production`. As chamadas a `/api` são repassadas ao backend pela hospedagem (veja "Hospedagem" abaixo). Se a variável estiver vazia, o site mostra um aviso claro em vez de tentar acessar `localhost`.
 
 Toda variável `VITE_*` vai para o JavaScript público do navegador. Não coloque senhas, tokens ou outras credenciais nela.
 
 ## Hospedagem
 
-O app usa `BrowserRouter`. Configure na hospedagem uma regra de rewrite de `/*` para `/index.html`. Sem ela, recarregar a página em `/questionario` dá erro 404:
+A hospedagem precisa de duas regras de rewrite, **nesta ordem**:
 
-- **Render Static Site:** use Redirects/Rewrites com Source `/*`, Destination `/index.html` e Action **Rewrite**.
-- **Vercel ou Netlify:** use a regra de rewrite equivalente.
+1. **`/api/*` → backend.** O site repassa as chamadas da API ao backend, e o navegador enxerga um site só. Sem essa regra, o cookie de sessão vira um "cookie de terceiro". O Safari e as abas anônimas bloqueiam esse tipo de cookie, e o login falha com "Sessão de segurança expirada".
+2. **`/*` → `/index.html`.** O app usa `BrowserRouter`. Sem essa regra, recarregar a página em `/questionario` dá erro 404.
+
+No **Render Static Site**, em Redirects/Rewrites, use Action **Rewrite** nas duas:
+
+| Source | Destination |
+|---|---|
+| `/api/*` | `https://pomohistoria.onrender.com/api/*` |
+| `/*` | `/index.html` |
+
+Em Vercel ou Netlify, use as regras equivalentes.
