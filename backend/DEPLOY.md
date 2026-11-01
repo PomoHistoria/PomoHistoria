@@ -24,7 +24,8 @@ O modelo completo, com comentários, está em [.env.example](./.env.example). O 
 | `SESSION_COOKIE_SECURE` | `true` | Só deve ser `false` em desenvolvimento sem HTTPS. |
 | `SESSION_TIMEOUT` | `30m` | Tempo de inatividade até a sessão expirar. |
 | `LOGIN_MAX_FALHAS_POR_EMAIL` | `5` | Senhas erradas seguidas antes de bloquear aquele e-mail. |
-| `LOGIN_MAX_FALHAS_POR_IP` | `50` | Senhas erradas de um mesmo IP antes de bloquear o IP. Em produção está em `500` por enquanto: veja "IP do usuário atrás do proxy" nas limitações. |
+| `LOGIN_MAX_FALHAS_POR_IP` | `50` | Senhas erradas de um mesmo IP antes de bloquear o IP. |
+| `LOGIN_HEADER_IP` | vazio | **No Render, use `CF-Connecting-IP`.** É o header de onde sai o IP real do usuário (veja "IP do usuário" abaixo). Vazio usa o IP da conexão. |
 | `LOGIN_BLOQUEIO_MINUTOS` | `15` | Duração da janela de bloqueio. |
 | `DB_POOL_SIZE` | `5` | Conexões simultâneas com o banco. |
 
@@ -48,6 +49,14 @@ A ordem importa: a regra `/*` captura tudo e precisa vir por último.
 Nas variáveis do Static Site, `VITE_API_BASE_URL` é a URL do **próprio frontend** (`https://pomohistoria-1.onrender.com`), não a do backend. Depois de mudar, faça um novo deploy, porque a variável entra no build.
 
 No backend, use `SESSION_COOKIE_SAME_SITE=lax`.
+
+## IP do usuário
+
+O limite de tentativas de login conta as falhas por IP. No Render, toda requisição passa pela Cloudflare. Por isso o IP da conexão (`getRemoteAddr()`) é sempre um IP da Cloudflare, e não o do usuário, tanto pelo proxy de `/api` quanto no acesso direto ao backend.
+
+Com `LOGIN_HEADER_IP=CF-Connecting-IP`, o IP vem desse header. Ele é confiável porque a Cloudflare o preenche com o IP real e recusa (erro 1000, HTTP 403) qualquer requisição em que o cliente tente enviá-lo. Isso foi conferido no proxy e no acesso direto.
+
+Não use o `X-Forwarded-For`: o primeiro item dele é o que o cliente mandar.
 
 ## Health check
 
@@ -92,5 +101,4 @@ Toda rota que não seja GET exige o header `X-XSRF-TOKEN`.
 
 - **Bloqueio de login em memória:** o limite de tentativas vale para uma única instância e zera quando o servidor reinicia. Se escalar para mais de uma instância, troque por um armazenamento compartilhado (ex.: Redis).
 - **Sessões em memória:** um restart ou um novo deploy desloga todos os usuários. Para manter as sessões, use Spring Session com JDBC ou Redis.
-- **IP do usuário atrás do proxy:** com o rewrite de `/api`, o pedido passa pelo proxy do Render antes de chegar ao backend. O backend pode passar a ver o IP do proxy em vez do IP de cada usuário, e aí o limite por IP somaria as falhas de todos. Por isso `LOGIN_MAX_FALHAS_POR_IP` está em `500` em produção. O limite por e-mail continua protegendo cada conta. O login registra temporariamente nos logs (`[TEMP-IP]`) os headers de origem, para medir quantos proxies há no caminho e ajustar a leitura do IP.
 - **Alternativa ao proxy:** um domínio próprio com subdomínios (ex.: `app.dominio.com.br` e `api.dominio.com.br`) também deixa os dois no mesmo site, sem proxy no meio.

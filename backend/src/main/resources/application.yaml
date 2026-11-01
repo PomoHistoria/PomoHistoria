@@ -53,3 +53,6 @@ app:
       max-falhas-por-email: ${LOGIN_MAX_FALHAS_POR_EMAIL:5}
       max-falhas-por-ip: ${LOGIN_MAX_FALHAS_POR_IP:50}
       bloqueio-minutos: ${LOGIN_BLOQUEIO_MINUTOS:15}
+      # Header com o IP real do usuário, preenchido pelo proxy da frente (no Render: CF-Connecting-IP).
+      # Vazio = usa o IP da conexão. Só use um header que o cliente não consiga enviar (ver IpDoCliente).
+      header-ip: ${LOGIN_HEADER_IP:}

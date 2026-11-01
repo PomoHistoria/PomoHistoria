@@ -6,8 +6,6 @@ import com.project.PomoHistoria.usuario.Usuario;
 import com.project.PomoHistoria.usuario.UsuarioService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.context.SecurityContextHolderStrategy;
@@ -17,27 +15,27 @@ import org.springframework.stereotype.Service;
 @Service
 public class AuthService {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthService.class);
-
     private final UsuarioService usuarioService;
     private final LoginAttemptService tentativas;
+    private final IpDoCliente ipDoCliente;
     private final SecurityContextRepository securityContextRepository;
     private final SecurityContextHolderStrategy contextHolder = SecurityContextHolder.getContextHolderStrategy();
 
     public AuthService(
             UsuarioService usuarioService,
             LoginAttemptService tentativas,
+            IpDoCliente ipDoCliente,
             SecurityContextRepository securityContextRepository
     ) {
         this.usuarioService = usuarioService;
         this.tentativas = tentativas;
+        this.ipDoCliente = ipDoCliente;
         this.securityContextRepository = securityContextRepository;
     }
 
     public Usuario entrar(String email, String senha, HttpServletRequest request, HttpServletResponse response) {
         String emailNormalizado = Usuario.normalizarEmail(email);
-        String ip = request.getRemoteAddr();
-        registrarOrigemTemporario(request);
+        String ip = ipDoCliente.de(request);
         tentativas.verificarBloqueio(emailNormalizado, ip);
 
         Usuario usuario;
@@ -58,29 +56,5 @@ public class AuthService {
         contextHolder.setContext(contexto);
         securityContextRepository.saveContext(contexto, request, response);
         return usuario;
-    }
-
-    /**
-     * TEMPORÁRIO: mostra nos logs de onde o login chega, para descobrir quantos proxies o Render põe
-     * no caminho depois do rewrite de /api no frontend. Remover depois de ajustar a leitura do IP.
-     */
-    private static void registrarOrigemTemporario(HttpServletRequest request) {
-        log.info(
-                "[TEMP-IP] remoteAddr={} x-forwarded-for={} true-client-ip={} cf-connecting-ip={} x-real-ip={}",
-                request.getRemoteAddr(),
-                limparParaLog(request.getHeader("X-Forwarded-For")),
-                limparParaLog(request.getHeader("True-Client-IP")),
-                limparParaLog(request.getHeader("CF-Connecting-IP")),
-                limparParaLog(request.getHeader("X-Real-IP"))
-        );
-    }
-
-    /** Headers vêm do cliente: corta quebras de linha (falsificação de log) e limita o tamanho. */
-    private static String limparParaLog(String valor) {
-        if (valor == null) {
-            return "-";
-        }
-        String limpo = valor.replaceAll("[\\r\\n]", "_");
-        return limpo.length() > 200 ? limpo.substring(0, 200) + "…" : limpo;
     }
 }
