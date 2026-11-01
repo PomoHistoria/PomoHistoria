@@ -157,7 +157,7 @@ Abra `http://localhost:5173`. O arquivo `.env.development` já aponta o frontend
 
 ## Testes
 
-**Backend:** são 43 testes, entre unitários e de integração. Eles sobem um PostgreSQL embutido automaticamente, então não precisam de banco local nem do `.env`.
+**Backend:** são 46 testes, entre unitários e de integração. Eles sobem um PostgreSQL embutido automaticamente, então não precisam de banco local nem do `.env`.
 
 ```powershell
 cd backend
