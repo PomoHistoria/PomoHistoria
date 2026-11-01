@@ -64,7 +64,7 @@ As 24 questões iniciais são carregadas automaticamente de [`backend/src/main/r
 └───────────────────────┘    JSON  +  token CSRF       └─────────────────────────┘        └────────────┘
 ```
 
-- **Comunicação:** o frontend é um site estático que conversa com a API REST. A autenticação usa **sessão HTTP** (cookie `JSESSIONID`, `HttpOnly`).
+- **Comunicação:** o frontend é um site estático que conversa com a API REST. Em produção, as chamadas vão para `/api` no próprio domínio do frontend, e a hospedagem as repassa ao backend. A autenticação usa **sessão HTTP** (cookie `JSESSIONID`, `HttpOnly`).
 - **CSRF:** toda requisição que altera dados envia um **token CSRF** no header `X-XSRF-TOKEN`.
 - **Banco:** o esquema é criado e atualizado pelo **Flyway** (`db/migration`); o Hibernate só valida que as entidades batem com as tabelas.
 - **Organização do backend:** por funcionalidade (`auth`, `usuario`, `questionario`, `security`, `common`), cada uma com o próprio controller, serviço, repositório e DTOs.
@@ -189,7 +189,7 @@ As variáveis principais estão abaixo. A lista completa, comentada, está em [`
 | Backend | `SPRING_DATASOURCE_USERNAME` / `SPRING_DATASOURCE_PASSWORD` | Credenciais do banco |
 | Backend | `CORS_ALLOWED_ORIGINS` | URL(s) do frontend autorizadas a chamar a API |
 | Backend | `ADMIN_EMAIL` / `ADMIN_PASSWORD` | Opcionais: criam a conta admin na inicialização |
-| Frontend | `VITE_API_BASE_URL` | URL pública do backend |
+| Frontend | `VITE_API_BASE_URL` | Endereço da API. Localmente, `http://localhost:8080`. Em produção, a URL do **próprio frontend**, que repassa `/api` ao backend |
 
 - O `backend/.env` serve só para desenvolvimento e **não vai para o git**.
 - Em produção, as variáveis são cadastradas no painel da hospedagem.
@@ -211,7 +211,8 @@ As variáveis principais estão abaixo. A lista completa, comentada, está em [`
 O projeto foi preparado para o **Render**:
 
 - **Backend:** Web Service do tipo Docker, com diretório raiz `backend`, um banco PostgreSQL na mesma região e health check em `/api/health`.
-- **Frontend:** Static Site com diretório raiz `frontend/pomohistoria`. O build é `npm ci && npm run build`, a pasta publicada é `dist`, e é preciso um rewrite de `/*` para `/index.html`.
+- **Frontend:** Static Site com diretório raiz `frontend/pomohistoria`. O build é `npm ci && npm run build` e a pasta publicada é `dist`. Ele precisa de duas regras de rewrite, nesta ordem: `/api/*` para o backend (proxy) e `/*` para `/index.html`.
+- **Mesmo site:** com o proxy de `/api`, o navegador só fala com o domínio do frontend. Assim o cookie de sessão não é tratado como "cookie de terceiro", que o Safari e as abas anônimas bloqueiam. Por isso o backend usa `SESSION_COOKIE_SAME_SITE=lax`.
 
 O passo a passo completo, as variáveis de produção, a tabela de rotas da API e as limitações conhecidas estão em [`backend/DEPLOY.md`](backend/DEPLOY.md).
 

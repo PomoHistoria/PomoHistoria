@@ -36,7 +36,8 @@ server:
       tracking-modes: cookie
       cookie:
         http-only: true
-        # Produção: front e back em domínios diferentes exigem SameSite=None + Secure (HTTPS).
+        # Produção: SESSION_COOKIE_SAME_SITE=lax, porque o frontend repassa /api e fica no mesmo site (ver DEPLOY.md).
+        # "none" + Secure só serve se o frontend chamar o backend direto, de outro domínio.
         secure: ${SESSION_COOKIE_SECURE:true}
         same-site: ${SESSION_COOKIE_SAME_SITE:none}
 
@@ -45,7 +46,7 @@ app:
     email: ${ADMIN_EMAIL:}
     password: ${ADMIN_PASSWORD:}
   cors:
-    # URLs do frontend separadas por vírgula, sem barra no final. Ex.: https://pomohistoria.vercel.app
+    # URLs do frontend separadas por vírgula, sem barra no final. Ex.: https://pomohistoria-1.onrender.com
     allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:5173,http://localhost:3000}
   security:
     login:
