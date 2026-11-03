@@ -43,6 +43,15 @@ export interface ResultadoValidacao {
   percentualMinimo: number;
   proximoModulo: number | null;
   proximaParte: number | null;
+  /** Uma por questão, na ordem da etapa. */
+  correcoes: Correcao[];
+}
+
+/** Correção de uma questão: se a alternativa escolhida está certa. O servidor não revela a correta. */
+export interface Correcao {
+  questaoId: string;
+  alternativaEscolhida: Alternativa;
+  correta: boolean;
 }
 
 export interface RespostaQuestao {
@@ -80,6 +89,19 @@ function isQuestao(value: unknown): value is Questao {
     typeof value.alternativaC === 'string' &&
     typeof value.alternativaD === 'string' &&
     typeof value.alternativaE === 'string'
+  );
+}
+
+function isAlternativa(value: unknown): value is Alternativa {
+  return value === 'A' || value === 'B' || value === 'C' || value === 'D' || value === 'E';
+}
+
+function isCorrecao(value: unknown): value is Correcao {
+  return (
+    isRecord(value) &&
+    typeof value.questaoId === 'string' &&
+    isAlternativa(value.alternativaEscolhida) &&
+    typeof value.correta === 'boolean'
   );
 }
 
@@ -141,7 +163,9 @@ export async function validarEtapa(
     typeof data.percentual !== 'number' ||
     typeof data.percentualMinimo !== 'number' ||
     !numeroOuNulo(data.proximoModulo) ||
-    !numeroOuNulo(data.proximaParte)
+    !numeroOuNulo(data.proximaParte) ||
+    // Servidor ainda na versão antiga (sem correções) durante um deploy: o resultado segue sem marcadores.
+    !(data.correcoes === undefined || (Array.isArray(data.correcoes) && data.correcoes.every(isCorrecao)))
   ) {
     formatoInvalido('um resultado');
   }
@@ -154,5 +178,6 @@ export async function validarEtapa(
     percentualMinimo: data.percentualMinimo,
     proximoModulo: data.proximoModulo,
     proximaParte: data.proximaParte,
+    correcoes: (data.correcoes as Correcao[] | undefined) ?? [],
   };
 }

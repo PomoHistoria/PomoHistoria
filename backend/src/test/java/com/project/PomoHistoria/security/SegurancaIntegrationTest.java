@@ -282,6 +282,28 @@ class SegurancaIntegrationTest extends PostgresEmbutido {
     }
 
     @Test
+    void duracaoDosCronometrosFicaSalvaNaConta() throws Exception {
+        MockHttpSession sessao = usuarioLogado(Usuario.Papel.USER);
+        mvc.perform(get("/api/auth/me").session(sessao))
+                .andExpect(jsonPath("$.duracaoFocoMinutos").value(25))
+                .andExpect(jsonPath("$.duracaoDescansoMinutos").value(5));
+
+        comCsrf(sessao, put("/api/usuarios/me/cronometros"), "{\"duracaoFocoMinutos\":40,\"duracaoDescansoMinutos\":10}")
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.duracaoFocoMinutos").value(40));
+        mvc.perform(get("/api/auth/me").session(sessao))
+                .andExpect(jsonPath("$.duracaoFocoMinutos").value(40))
+                .andExpect(jsonPath("$.duracaoDescansoMinutos").value(10));
+
+        comCsrf(sessao, put("/api/usuarios/me/cronometros"), "{\"duracaoFocoMinutos\":0,\"duracaoDescansoMinutos\":10}")
+                .andExpect(status().isBadRequest());
+        comCsrf(sessao, put("/api/usuarios/me/cronometros"), "{\"duracaoFocoMinutos\":100,\"duracaoDescansoMinutos\":10}")
+                .andExpect(status().isBadRequest());
+        comCsrf(sessao, put("/api/usuarios/me/cronometros"), "{\"duracaoFocoMinutos\":40}")
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     void registraModuloIniciadoSomenteSeLiberado() throws Exception {
         MockHttpSession sessao = usuarioLogado(Usuario.Papel.USER);
         mvc.perform(get("/api/questionario/progresso").session(sessao))

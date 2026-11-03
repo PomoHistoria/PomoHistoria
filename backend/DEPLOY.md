@@ -58,6 +58,12 @@ Com `LOGIN_HEADER_IP=CF-Connecting-IP`, o IP vem desse header. Ele é confiável
 
 Não use o `X-Forwarded-For`: o primeiro item dele é o que o cliente mandar.
 
+## Inicialização
+
+No plano gratuito, o Render desliga o backend depois de 15 minutos sem acessos, e o primeiro acesso seguinte espera a JVM subir de novo. Para encurtar essa espera, o [Dockerfile](./Dockerfile) gera um **cache AOT do Java 25** durante o build. Uma rodada de treino sobe o Spring sem acessar o banco e grava as classes carregadas. Com 1 CPU, a inicialização caiu de ~11 s para ~4,4 s nos testes locais.
+
+Isso não gasta horas do plano gratuito: o backend continua dormindo quando não há acessos, só acorda mais rápido.
+
 ## Health check
 
 Configure o **Health Check Path** do Render como `/api/health`. Ele é público e não cria sessão.
@@ -89,11 +95,12 @@ Toda rota que não seja GET exige o header `X-XSRF-TOKEN`.
 | GET | `/api/auth/me` | logado | Usuário atual (401 se não houver login) |
 | PUT | `/api/usuarios/me` | logado | Salvar perfil; trocar email ou senha exige `senhaAtual` |
 | PUT | `/api/usuarios/me/foto` | logado | Salvar ou remover (`null`) a foto |
+| PUT | `/api/usuarios/me/cronometros` | logado | Salvar a última duração dos cronômetros (`duracaoFocoMinutos` e `duracaoDescansoMinutos`, de 1 a 99) |
 | DELETE | `/api/usuarios/me` | logado (só USER) | Excluir a própria conta, com `senhaAtual`; apaga o progresso junto e encerra a sessão (204). ADMIN recebe 403 |
 | GET | `/api/questionario/progresso` | logado | Etapas, módulo atual e módulos já abertos |
 | POST | `/api/questionario/modulos/{m}/iniciar` | logado | Marca que o módulo foi aberto (troca o fundo) |
 | GET | `/api/questionario/modulos/{m}/partes/{p}` | logado | Questões da etapa, sem o gabarito |
-| POST | `/api/questionario/modulos/{m}/partes/{p}/validar` | logado | Corrige as respostas |
+| POST | `/api/questionario/modulos/{m}/partes/{p}/validar` | logado | Corrige as respostas e devolve, por questão, se a alternativa escolhida está certa (sem revelar a correta) |
 | GET | `/api/admin/questoes` | ADMIN | Todas as questões, com o gabarito |
 | PUT | `/api/admin/questoes/{id}` | ADMIN | Editar enunciado, alternativas e resposta correta |
 

@@ -53,7 +53,30 @@ public class Usuario {
     @Column(length = 400_000)
     private String foto;
 
+    /** Última duração usada nos cronômetros Pomodoro, em minutos (1 a 99). */
+    @Column(name = "duracao_foco_minutos", nullable = false)
+    private int duracaoFocoMinutos = 25;
+
+    @Column(name = "duracao_descanso_minutos", nullable = false)
+    private int duracaoDescansoMinutos = 5;
+
     protected Usuario() {
+    }
+
+    public int getDuracaoFocoMinutos() {
+        return duracaoFocoMinutos;
+    }
+
+    public void setDuracaoFocoMinutos(int duracaoFocoMinutos) {
+        this.duracaoFocoMinutos = duracaoFocoMinutos;
+    }
+
+    public int getDuracaoDescansoMinutos() {
+        return duracaoDescansoMinutos;
+    }
+
+    public void setDuracaoDescansoMinutos(int duracaoDescansoMinutos) {
+        this.duracaoDescansoMinutos = duracaoDescansoMinutos;
     }
 
     public String getTelefone() {

@@ -9,6 +9,9 @@ export interface User {
   dataCriacao: string;
   ativo: boolean;
   papel: 'USER' | 'ADMIN';
+  /** Última duração usada nos cronômetros, em minutos. Ausente se o servidor ainda não tiver a versão nova. */
+  duracaoFocoMinutos?: number;
+  duracaoDescansoMinutos?: number;
 }
 
 /** Dados enviados ao salvar o perfil. */

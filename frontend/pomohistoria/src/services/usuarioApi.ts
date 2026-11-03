@@ -17,6 +17,14 @@ export const usuarioApi = {
     return exigirUsuario(await apiRequest('/api/usuarios/me/foto', { method: 'PUT', body: { foto } }));
   },
 
+  /** Guarda na conta a última duração usada em cada cronômetro (1 a 99 minutos). */
+  async atualizarCronometros(duracaoFocoMinutos: number, duracaoDescansoMinutos: number): Promise<User> {
+    return exigirUsuario(await apiRequest('/api/usuarios/me/cronometros', {
+      method: 'PUT',
+      body: { duracaoFocoMinutos, duracaoDescansoMinutos },
+    }));
+  },
+
   /** Exclui a própria conta (só usuários comuns). O servidor encerra a sessão. */
   async excluirConta(senhaAtual: string): Promise<void> {
     await apiRequest('/api/usuarios/me', { method: 'DELETE', body: { senhaAtual } });

@@ -5,6 +5,7 @@ import static com.project.PomoHistoria.questionario.QuestionarioRegras.*;
 import com.project.PomoHistoria.common.exception.ConflitoException;
 import com.project.PomoHistoria.common.exception.DadosInvalidosException;
 import com.project.PomoHistoria.common.exception.NaoEncontradoException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
@@ -64,11 +65,13 @@ public class QuestionarioService {
         }
 
         int corretas = 0;
+        List<String> escolhidas = new ArrayList<>();
         for (Questionario questao : questoes) {
             String alternativa = respostasPorQuestao.remove(questao.getId());
             if (alternativa == null) {
                 throw new DadosInvalidosException("As respostas não correspondem às questões desta etapa.");
             }
+            escolhidas.add(alternativa);
             if (questao.getRespostaCorreta().equalsIgnoreCase(alternativa)) {
                 corretas++;
             }
@@ -78,6 +81,17 @@ public class QuestionarioService {
         }
 
         boolean aprovado = corretas * 100 >= questoes.size() * APROVACAO_PERCENTUAL;
+
+        // Diz só se cada resposta está certa ou errada: a alternativa correta nunca sai daqui.
+        List<Correcao> correcoes = new ArrayList<>();
+        for (int i = 0; i < questoes.size(); i++) {
+            Questionario questao = questoes.get(i);
+            correcoes.add(new Correcao(
+                    questao.getId(),
+                    escolhidas.get(i),
+                    questao.getRespostaCorreta().equalsIgnoreCase(escolhidas.get(i))
+            ));
+        }
         Integer proximoModulo = null;
         Integer proximaParte = null;
         if (aprovado) {
@@ -98,7 +112,8 @@ public class QuestionarioService {
                 percentual(corretas, questoes.size()),
                 APROVACAO_PERCENTUAL,
                 proximoModulo,
-                proximaParte
+                proximaParte,
+                correcoes
         );
     }
 
@@ -157,7 +172,17 @@ public class QuestionarioService {
             int percentual,
             int percentualMinimo,
             Integer proximoModulo,
-            Integer proximaParte
+            Integer proximaParte,
+            /** Uma por questão, na ordem da etapa. */
+            List<Correcao> correcoes
+    ) {
+    }
+
+    /** Correção de uma questão: se a alternativa escolhida está certa. Não revela a correta. */
+    public record Correcao(
+            UUID questaoId,
+            String alternativaEscolhida,
+            boolean correta
     ) {
     }
 
