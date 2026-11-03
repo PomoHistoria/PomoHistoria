@@ -36,7 +36,7 @@ function Carregando() {
         <>
           <strong style={{ fontSize: '1.1rem' }}>O servidor está iniciando…</strong>
           <span style={{ color: '#705c49', fontSize: '0.95rem', maxWidth: '28rem' }}>
-            Depois de um tempo sem uso, o primeiro acesso pode levar até 1 minuto. Aguarde, a página abre sozinha.
+            Depois de um tempo sem uso, o primeiro acesso pode levar de 1 a 2 minutos. Aguarde, a página abre sozinha.
           </span>
         </>
       ) : (
