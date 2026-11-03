@@ -34,7 +34,10 @@ RUN java -Djarmode=tools -jar app.jar extract --destination extraido && rm app.j
 # carregadas, já ligadas. Com 1 CPU, a inicialização caiu de ~11 s para ~4,4 s. A rodada de treino não acessa o
 # banco: o Flyway fica desligado e o Hibernate não consulta o banco para descobrir o dialeto.
 # Se um dia o cache não servir (ex.: outra versão da JVM), a JVM só avisa no log e sobe normalmente, sem ele.
-RUN java -XX:AOTCacheOutput=app.aot \
+# -XX:MaxRAM=512m: o treino calcula a memória como no servidor (512 MB no plano gratuito). Sem isso, a máquina de
+# build, com muita memória, passa de 32 GB de heap, desliga os "compressed oops", e o servidor recusa o cache
+# ("Unable to map shared spaces").
+RUN java -XX:MaxRAM=512m -XX:AOTCacheOutput=app.aot \
         -Dspring.context.exit=onRefresh \
         -Dspring.flyway.enabled=false \
         -Dspring.jpa.hibernate.ddl-auto=none \
