@@ -68,6 +68,14 @@ class QuestionarioServiceTest {
         assertEquals(1, resultado.proximoModulo());
         assertEquals(2, resultado.proximaParte());
         verify(progressoService).registrarConclusao(USUARIO_ID, 1, 1, 3, 4);
+
+        // Cada questão diz se a alternativa escolhida acertou, na ordem da etapa.
+        List<QuestionarioService.Correcao> correcoes = resultado.correcoes();
+        assertEquals(4, correcoes.size());
+        assertEquals(questoes.get(0).getId(), correcoes.get(0).questaoId());
+        assertTrue(correcoes.get(0).correta());
+        assertFalse(correcoes.get(3).correta());
+        assertEquals("A", correcoes.get(3).alternativaEscolhida());
     }
 
     @Test
@@ -81,6 +89,10 @@ class QuestionarioServiceTest {
 
         assertFalse(resultado.aprovado());
         assertEquals(50, resultado.percentual());
+
+        // Reprovado também mostra o que acertou e errou.
+        List<QuestionarioService.Correcao> correcoes = resultado.correcoes();
+        assertEquals(List.of(true, true, false, false), correcoes.stream().map(QuestionarioService.Correcao::correta).toList());
         verify(progressoService, never()).registrarConclusao(
                 eq(USUARIO_ID),
                 anyInt(),

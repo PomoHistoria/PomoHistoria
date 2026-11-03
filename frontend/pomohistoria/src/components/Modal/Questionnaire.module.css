@@ -343,6 +343,78 @@
   color: #fff;
 }
 
+/* Correção: verde = acertou, vermelho = errou. A alternativa correta não é revelada. */
+.question:disabled .answer {
+  cursor: default;
+}
+
+.question:disabled .answer:hover {
+  border-color: #e8ded3;
+  background: transparent;
+}
+
+.questionCorrect {
+  border-color: #9fd3a6;
+}
+
+.questionWrong {
+  border-color: #eab0a6;
+}
+
+.markCorrect,
+.markWrong {
+  margin-left: 0.6rem;
+  border-radius: 999px;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.68rem;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.markCorrect {
+  background: #e3f4e5;
+  color: #22652f;
+}
+
+.markWrong {
+  background: #fde6e2;
+  color: #9c2f20;
+}
+
+.question:disabled .answerCorrect,
+.answerCorrect {
+  border-color: #3f9a4e;
+  background: #edf8ec;
+  color: #1f5229;
+}
+
+.answerCorrect .answerLetter {
+  background: #3f9a4e;
+  color: #fff;
+}
+
+.question:disabled .answerWrong,
+.answerWrong {
+  border-color: #c9442f;
+  background: #fff0ed;
+  color: #7d2316;
+}
+
+.answerWrong .answerLetter {
+  background: #c9442f;
+  color: #fff;
+}
+
+.answerTag {
+  margin-left: auto;
+  flex: 0 0 auto;
+  border-radius: 999px;
+  padding: 0.1rem 0.45rem;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 0.66rem;
+  font-weight: 700;
+}
+
 .message,
 .errorMessage {
   margin: 0;

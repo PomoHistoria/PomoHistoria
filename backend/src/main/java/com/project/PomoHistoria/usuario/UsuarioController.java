@@ -1,5 +1,6 @@
 package com.project.PomoHistoria.usuario;
 
+import com.project.PomoHistoria.usuario.dto.UsuarioDtos.CronometrosRequest;
 import com.project.PomoHistoria.usuario.dto.UsuarioDtos.ExclusaoContaRequest;
 import com.project.PomoHistoria.usuario.dto.UsuarioDtos.FotoRequest;
 import com.project.PomoHistoria.usuario.dto.UsuarioDtos.PerfilRequest;
@@ -49,6 +50,18 @@ public class UsuarioController {
             @Valid @RequestBody FotoRequest request
     ) {
         return UsuarioResponse.de(usuarioService.atualizarFoto(usuarioId, request.foto()));
+    }
+
+    @PutMapping("/cronometros")
+    public UsuarioResponse atualizarCronometros(
+            @AuthenticationPrincipal UUID usuarioId,
+            @Valid @RequestBody CronometrosRequest request
+    ) {
+        return UsuarioResponse.de(usuarioService.atualizarCronometros(
+                usuarioId,
+                request.duracaoFocoMinutos(),
+                request.duracaoDescansoMinutos()
+        ));
     }
 
     /** Exclui a própria conta (só usuários comuns) e encerra a sessão. */

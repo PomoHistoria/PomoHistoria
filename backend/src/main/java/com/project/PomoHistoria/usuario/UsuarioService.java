@@ -125,6 +125,14 @@ public class UsuarioService {
         return usuarioRepository.saveAndFlush(usuario);
     }
 
+    /** Guarda a última duração usada em cada cronômetro (1 a 99 minutos, já validado no DTO). */
+    public Usuario atualizarCronometros(UUID id, int duracaoFocoMinutos, int duracaoDescansoMinutos) {
+        Usuario usuario = buscarAtivo(id);
+        usuario.setDuracaoFocoMinutos(duracaoFocoMinutos);
+        usuario.setDuracaoDescansoMinutos(duracaoDescansoMinutos);
+        return usuarioRepository.saveAndFlush(usuario);
+    }
+
     private static void validarFoto(String foto) {
         Matcher matcher = FOTO_DATA_URL.matcher(foto);
         if (!matcher.matches()) {

@@ -2,7 +2,10 @@ package com.project.PomoHistoria.usuario.dto;
 
 import com.project.PomoHistoria.usuario.Usuario;
 import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.Instant;
@@ -25,7 +28,9 @@ public final class UsuarioDtos {
             String foto,
             Instant dataCriacao,
             boolean ativo,
-            Usuario.Papel papel
+            Usuario.Papel papel,
+            int duracaoFocoMinutos,
+            int duracaoDescansoMinutos
     ) {
 
         public static UsuarioResponse de(Usuario usuario) {
@@ -37,9 +42,25 @@ public final class UsuarioDtos {
                     usuario.getFoto(),
                     usuario.getDataCriacao(),
                     usuario.isAtivo(),
-                    usuario.getPapel()
+                    usuario.getPapel(),
+                    usuario.getDuracaoFocoMinutos(),
+                    usuario.getDuracaoDescansoMinutos()
             );
         }
+    }
+
+    /** Última duração usada em cada cronômetro, em minutos. */
+    public record CronometrosRequest(
+            @NotNull(message = "Informe a duração do foco.")
+            @Min(value = 1, message = "A duração deve ser de 1 a 99 minutos.")
+            @Max(value = 99, message = "A duração deve ser de 1 a 99 minutos.")
+            Integer duracaoFocoMinutos,
+
+            @NotNull(message = "Informe a duração do descanso.")
+            @Min(value = 1, message = "A duração deve ser de 1 a 99 minutos.")
+            @Max(value = 99, message = "A duração deve ser de 1 a 99 minutos.")
+            Integer duracaoDescansoMinutos
+    ) {
     }
 
     /**

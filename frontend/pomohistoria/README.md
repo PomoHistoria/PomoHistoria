@@ -20,11 +20,11 @@ O frontend conversa com o backend Spring Boot por sessão (cookie). Todas as cha
 
 Cada área tem seu serviço:
 - `authApi.ts`: cadastro, login, logout e usuário atual;
-- `usuarioApi.ts`: perfil, foto e exclusão da conta;
+- `usuarioApi.ts`: perfil, foto, duração dos cronômetros e exclusão da conta;
 - `questionarioApi.ts`: progresso, questões, início de módulo e envio das respostas;
 - `adminApi.ts`: edição de questões.
 
-A correção das respostas é feita no backend; o gabarito nunca chega ao navegador do estudante. A lista completa de rotas está em [`backend/DEPLOY.md`](../../backend/DEPLOY.md#rotas-da-api).
+A correção das respostas é feita no backend. Depois do envio, cada questão aparece marcada como certa ou errada. O gabarito nunca chega ao navegador do estudante. A lista completa de rotas está em [`backend/DEPLOY.md`](../../backend/DEPLOY.md#rotas-da-api).
 
 ## Páginas
 

@@ -119,28 +119,12 @@ export default function Questionnaire() {
     setResultado(null);
 
     try {
-      const validacao = await validarEtapa(
+      // As questões continuam na tela com a correção; o aluno decide quando seguir.
+      setResultado(await validarEtapa(
         progresso.moduloAtual,
         progresso.parteAtual,
         respostasEnviadas
-      );
-      setResultado(validacao);
-
-      if (validacao.aprovado) {
-        const progressoAtualizado = await obterProgresso();
-        setProgresso(progressoAtualizado);
-        // Se a aprovação liberou o módulo seguinte, ele está sendo aberto agora.
-        marcarInicioDoModulo(usuarioId, progressoAtualizado);
-        setRespostas({});
-        if (progressoAtualizado.moduloAtual !== null && progressoAtualizado.parteAtual !== null) {
-          setQuestoes(await listarQuestoes(
-            progressoAtualizado.moduloAtual,
-            progressoAtualizado.parteAtual
-          ));
-        } else {
-          setQuestoes([]);
-        }
-      }
+      ));
     } catch (error: unknown) {
       setErro(error instanceof Error ? error.message : 'Não foi possível validar suas respostas.');
       setPrecisaLogin(sessaoExpirou(error));
@@ -149,9 +133,46 @@ export default function Questionnaire() {
     }
   }
 
+  /** Depois da aprovação: carrega a próxima parte (ou a conclusão da jornada). */
+  async function avancar() {
+    setCarregando(true);
+    setErro('');
+    try {
+      const progressoAtualizado = await obterProgresso();
+      setProgresso(progressoAtualizado);
+      // Se a aprovação liberou o módulo seguinte, ele está sendo aberto agora.
+      marcarInicioDoModulo(usuarioId, progressoAtualizado);
+      setRespostas({});
+      setResultado(null);
+      if (progressoAtualizado.moduloAtual !== null && progressoAtualizado.parteAtual !== null) {
+        setQuestoes(await listarQuestoes(
+          progressoAtualizado.moduloAtual,
+          progressoAtualizado.parteAtual
+        ));
+      } else {
+        setQuestoes([]);
+      }
+      document.getElementById('part-title')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    } catch (error: unknown) {
+      setErro(error instanceof Error ? error.message : 'Não foi possível carregar a próxima parte.');
+      setPrecisaLogin(sessaoExpirou(error));
+    } finally {
+      setCarregando(false);
+    }
+  }
+
+  /** Depois da reprovação: limpa as respostas para uma nova tentativa da mesma parte. */
+  function tentarNovamente() {
+    setRespostas({});
+    setResultado(null);
+    document.getElementById('part-title')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   const moduloAtual = progresso?.moduloAtual ?? 1;
   const parteAtual = progresso?.parteAtual ?? 1;
   const respondidas = Object.keys(respostas).length;
+  const corrigido = resultado !== null;
+  const correcaoPorQuestao = new Map((resultado?.correcoes ?? []).map((correcao) => [correcao.questaoId, correcao]));
 
   return (
     <main className={styles.page}>
@@ -266,37 +287,55 @@ export default function Questionnaire() {
 
               {!carregando && questoes.length > 0 && (
                 <div className={styles.questions}>
-                  {questoes.map((questao, indice) => (
-                    <fieldset className={styles.question} key={questao.id}>
-                      <legend>
-                        <span className={styles.questionNumber}>Questão {indice + 1}</span>
-                        {questao.enunciado}
-                      </legend>
-                      <div className={styles.answers}>
-                        {alternativas.map((alternativa) => {
-                          const id = `questao-${questao.id}-${alternativa}`;
-                          return (
-                            <label
-                              className={`${styles.answer} ${respostas[questao.id] === alternativa ? styles.answerSelected : ''}`}
-                              htmlFor={id}
-                              key={alternativa}
-                            >
-                              <input
-                                id={id}
-                                type="radio"
-                                name={`questao-${questao.id}`}
-                                value={alternativa}
-                                checked={respostas[questao.id] === alternativa}
-                                onChange={() => selecionarResposta(questao.id, alternativa)}
-                              />
-                              <span className={styles.answerLetter}>{alternativa}</span>
-                              <span>{obterTextoAlternativa(questao, alternativa)}</span>
-                            </label>
-                          );
-                        })}
-                      </div>
-                    </fieldset>
-                  ))}
+                  {questoes.map((questao, indice) => {
+                    const correcao = correcaoPorQuestao.get(questao.id);
+                    return (
+                      <fieldset
+                        className={`${styles.question} ${correcao ? (correcao.correta ? styles.questionCorrect : styles.questionWrong) : ''}`}
+                        key={questao.id}
+                        disabled={corrigido}
+                      >
+                        <legend>
+                          <span className={styles.questionNumber}>
+                            Questão {indice + 1}
+                            {correcao && (
+                              <span className={correcao.correta ? styles.markCorrect : styles.markWrong}>
+                                {correcao.correta ? '✓ Você acertou' : '✗ Você errou'}
+                              </span>
+                            )}
+                          </span>
+                          {questao.enunciado}
+                        </legend>
+                        <div className={styles.answers}>
+                          {alternativas.map((alternativa) => {
+                            const id = `questao-${questao.id}-${alternativa}`;
+                            const escolhida = respostas[questao.id] === alternativa;
+                            let marcador = escolhida ? styles.answerSelected : '';
+                            let etiqueta = '';
+                            if (correcao && alternativa === correcao.alternativaEscolhida) {
+                              marcador = correcao.correta ? styles.answerCorrect : styles.answerWrong;
+                              etiqueta = 'Sua resposta';
+                            }
+                            return (
+                              <label className={`${styles.answer} ${marcador}`} htmlFor={id} key={alternativa}>
+                                <input
+                                  id={id}
+                                  type="radio"
+                                  name={`questao-${questao.id}`}
+                                  value={alternativa}
+                                  checked={escolhida}
+                                  onChange={() => selecionarResposta(questao.id, alternativa)}
+                                />
+                                <span className={styles.answerLetter}>{alternativa}</span>
+                                <span>{obterTextoAlternativa(questao, alternativa)}</span>
+                                {etiqueta && <span className={styles.answerTag}>{etiqueta}</span>}
+                              </label>
+                            );
+                          })}
+                        </div>
+                      </fieldset>
+                    );
+                  })}
                 </div>
               )}
 
@@ -305,21 +344,43 @@ export default function Questionnaire() {
                   Você acertou {resultado.respostasCorretas} de {resultado.totalQuestoes} questões
                   ({resultado.percentual}%).{' '}
                   {resultado.aprovado
-                    ? 'Etapa concluída; seu progresso foi atualizado.'
-                    : `Você precisa de pelo menos ${resultado.percentualMinimo}% para avançar. Tente novamente.`}
+                    ? 'Etapa concluída; seu progresso foi atualizado. Confira nas questões o que você acertou e errou.'
+                    : `Você precisa de pelo menos ${resultado.percentualMinimo}% para avançar. Revise as questões marcadas como erradas e tente novamente.`}
                 </p>
               )}
 
               <footer className={styles.quizFooter}>
-                <p>{respondidas} de {questoes.length} respondidas</p>
-                <button
-                  className={styles.submitButton}
-                  type="button"
-                  disabled={enviando || carregando || questoes.length !== 4 || respondidas !== questoes.length}
-                  onClick={() => void enviarRespostas()}
-                >
-                  {enviando ? 'Validando...' : 'Enviar respostas'}
-                </button>
+                {resultado ? (
+                  <>
+                    <p>{resultado.respostasCorretas} de {resultado.totalQuestoes} corretas</p>
+                    {resultado.aprovado ? (
+                      <button
+                        className={styles.submitButton}
+                        type="button"
+                        disabled={carregando}
+                        onClick={() => void avancar()}
+                      >
+                        {resultado.proximaParte !== null ? 'Ir para a próxima parte' : 'Concluir jornada'}
+                      </button>
+                    ) : (
+                      <button className={styles.submitButton} type="button" onClick={tentarNovamente}>
+                        Tentar novamente
+                      </button>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    <p>{respondidas} de {questoes.length} respondidas</p>
+                    <button
+                      className={styles.submitButton}
+                      type="button"
+                      disabled={enviando || carregando || questoes.length !== 4 || respondidas !== questoes.length}
+                      onClick={() => void enviarRespostas()}
+                    >
+                      {enviando ? 'Validando...' : 'Enviar respostas'}
+                    </button>
+                  </>
+                )}
               </footer>
               <p className={styles.backendNote}>
                 A aprovação exige no mínimo 70% de acertos. A correção e a liberação são validadas pelo servidor.

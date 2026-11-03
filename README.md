@@ -22,7 +22,7 @@ O **PomoHistória** é uma plataforma de estudo de História que junta a **técn
 
 **Para o estudante**
 - Cadastro e login com sessão segura.
-- Dois temporizadores Pomodoro, um de foco e um de descanso, com duração ajustável. Eles continuam contando ao trocar de página.
+- Dois temporizadores Pomodoro, um de foco e um de descanso, com duração ajustável. Eles continuam contando ao trocar de página. Ao terminar, voltam para a duração usada, que fica salva na conta e vale em qualquer aparelho.
 - Questionário dividido em módulos e partes. A correção é feita no servidor e o progresso fica salvo por usuário.
 - Fundo da tela inicial que muda conforme o módulo que o estudante já abriu.
 - Perfil editável: nome, telefone, e-mail, senha e foto.
@@ -40,7 +40,7 @@ O **PomoHistória** é uma plataforma de estudo de História que junta a **técn
 
 - **Ordem:** o estudante começa no Módulo 1, Parte 1.
 - **Aprovação:** cada parte tem 4 questões de múltipla escolha (A a E) e exige pelo menos **70% de acertos**, ou seja, 3 de 4. Ao ser aprovado, a parte seguinte é liberada; ao concluir as 3 partes do Módulo 1, o Módulo 2 é liberado.
-- **Gabarito:** a correção acontece só no backend. As respostas corretas nunca são enviadas ao navegador do estudante.
+- **Correção:** acontece só no backend. Depois do envio, cada questão aparece marcada como certa ou errada, tanto na aprovação quanto na reprovação. A alternativa correta das questões erradas nunca é mostrada.
 - **Fundo da tela:** o Início e o Temporizador mostram o fundo inicial até o estudante abrir o primeiro módulo. Depois, mostram a Grécia (Módulo 1) e, a partir do Módulo 2, a Era Vargas.
 
 As 24 questões iniciais são carregadas automaticamente de [`backend/src/main/resources/db/seed/questionario/`](backend/src/main/resources/db/seed/questionario) na primeira vez que o backend sobe com o banco vazio.
@@ -157,7 +157,7 @@ Abra `http://localhost:5173`. O arquivo `.env.development` já aponta o frontend
 
 ## Testes
 
-**Backend:** são 46 testes, entre unitários e de integração. Eles sobem um PostgreSQL embutido automaticamente, então não precisam de banco local nem do `.env`.
+**Backend:** são 47 testes, entre unitários e de integração. Eles sobem um PostgreSQL embutido automaticamente, então não precisam de banco local nem do `.env`.
 
 ```powershell
 cd backend
@@ -203,7 +203,7 @@ As variáveis principais estão abaixo. A lista completa, comentada, está em [`
 - **CSRF:** obrigatório em toda requisição que altera dados.
 - **CORS:** restrito às origens configuradas.
 - **Tentativas de login:** limitadas por e-mail e por IP. As respostas não revelam se um e-mail está cadastrado.
-- **Dados sensíveis:** trocar e-mail ou senha, ou excluir a conta, exige a senha atual. O gabarito só sai pelas rotas de admin.
+- **Dados sensíveis:** trocar e-mail ou senha, ou excluir a conta, exige a senha atual. O gabarito só sai pelas rotas de admin. O estudante só fica sabendo se cada resposta dele está certa ou errada.
 - **Container:** o backend roda sem privilégios de root.
 
 ## Deploy
